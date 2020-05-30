@@ -35,25 +35,6 @@ namespace PixelStudio.Controllers
         }
 
 
-        /*  
-        public Order Save(Order orders)
-        {
-            using (SqlConnection sqlConnection = new SqlConnection(mainconn))
-            {
-                sqlConnection.Open();
-                string command = "INSERT INTO [dbo].[Order]([UserId],[TotalPrice], [Status])" +
-                    "VALUES(@UserId,@Price,@Status)";
-
-                SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@UserId", orders.UserId);
-                sqlCommand.Parameters.AddWithValue("@UserId", orders.UserId);
-                sqlCommand.Parameters.AddWithValue("@UserId", orders.UserId);
-
-
-            }
-        }
-        */
-
 
         /*-----------------------------------------SERVICE MANAGEMENT-------------------------------------*/
         
@@ -171,11 +152,12 @@ namespace PixelStudio.Controllers
             try
             {
                 Update_Service(Id, photoService);
-                return RedirectToAction("All_Orders");
+                return RedirectToAction("All_Services");
             }
             catch
             {
                 return View();
+
             }
 
         }
@@ -203,7 +185,7 @@ namespace PixelStudio.Controllers
                             Service.Description = reader["Description"].ToString();
                             Service.ColorType = reader["ColorType"].ToString();
                             Service.Price = Convert.ToDecimal(reader["Price"]);
-                            Service.Image = reader["Image"].ToString();
+                            //Service.Image = reader["Image"].ToString();
                             serviceList.Add(Service);
                             
                         }
@@ -297,21 +279,16 @@ namespace PixelStudio.Controllers
             using (SqlConnection sqlConnection = new SqlConnection(mainconn))
             {
                 sqlConnection.Open();
-                string command = "UPDATE [dbo].[Seveces] " +
-                                 "SET SName = @SName," +
-                                 "PhotoFormat = @PhotoFormat," +
-                                 "Description = @Description," +
-                                 "ColorType = @ColorType," +
-                                 "Price = @Price" +
-                                 "WHERE serviceId = @Id";
+                string command = "UPDATE [dbo].[Seveces] SET SName = @SName, PhotoFormat = @PhotoFormat, Description = @Description, ColorType = @ColorType, Price = @Price WHERE serviceId = @Id";
                 SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
 
-                sqlCommand.Parameters.AddWithValue("@Id", photoService.ServiceId);
+                sqlCommand.Parameters.AddWithValue("@Id", id);
                 sqlCommand.Parameters.AddWithValue("@SName", photoService.Name);
                 sqlCommand.Parameters.AddWithValue("@PhotoFormat", photoService.PhotoFormat);
                 sqlCommand.Parameters.AddWithValue("@Description", photoService.Description);
                 sqlCommand.Parameters.AddWithValue("@ColorType", photoService.ColorType);
                 sqlCommand.Parameters.AddWithValue("@Price", photoService.Price);
+                //sqlCommand.Parameters.AddWithValue("@Image", photoService.Image);
                 sqlCommand.ExecuteNonQuery();
 
                 sqlConnection.Close();

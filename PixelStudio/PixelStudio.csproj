@@ -176,13 +176,13 @@
     <Content Include="Views\UserLogin\Enter.cshtml" />
     <Content Include="Views\UserLogin\Logined.cshtml" />
     <Content Include="Views\UserLogin\Register.cshtml" />
-    <Content Include="Views\Administration\Edit_Service.cshtml" />
     <Content Include="Views\Administration\Delete_Service.cshtml" />
     <Content Include="Views\Administration\All_Services.cshtml" />
     <Content Include="Views\Administration\Service_Details.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
     <Content Include="Views\Administration\Create_new_Service.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
+    <Content Include="Views\Administration\Edit_Service.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
