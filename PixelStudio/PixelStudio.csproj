@@ -121,6 +121,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserLoginController.cs" />
     <Compile Include="Global.asax.cs">
@@ -175,15 +176,17 @@
     <Content Include="Views\UserLogin\Enter.cshtml" />
     <Content Include="Views\UserLogin\Logined.cshtml" />
     <Content Include="Views\UserLogin\Register.cshtml" />
-    <Content Include="Views\Administration\Create_new_Service.cshtml" />
     <Content Include="Views\Administration\Edit_Service.cshtml" />
     <Content Include="Views\Administration\Delete_Service.cshtml" />
     <Content Include="Views\Administration\All_Services.cshtml" />
     <Content Include="Views\Administration\Service_Details.cshtml" />
-    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Error\Error.cshtml" />
+    <Content Include="Views\Administration\Create_new_Service.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="User-Images\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>

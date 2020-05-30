@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Error";
+}
+
+<style>
+    .error{
+        margin:0 auto;
+        padding:0;
+        height:100%;
+        width:100%
+    }
+    a.hover{
+        text-decoration:none;
+        text-decoration-skip:none;
+    }
+    .suberror {
+        
+        margin: 200px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size: large;
+        font-style: normal;
+        padding: 20px;
+        max-height: 1000px;
+        max-width: 1000px;
+        width: 50%;
+        height: 50%;
+        background-color: #696969;
+        border-radius: 10px;
+        text-align: center;
+    }
+</style>
+
+
+<div class="error">
+    <div class="suberror">
+        <p>
+            Ooyps. Something went wrong<br />
+
+        </p>
+        <hr />
+        <p>We are very sorry about this<br />
+            Check web site after several minutes or call the number 12-244-22
+        <br />With best regards<br /> Pixel Studio company</p>
+        <div class="btn btn-default" style="text-decoration: none;">
+            @Html.ActionLink("Home", "Home", "Home")
+        </div>
+    </div>
+</div>
