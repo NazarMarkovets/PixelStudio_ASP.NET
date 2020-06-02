@@ -23,7 +23,7 @@
 <h2 class="text-center">All Services</h2>
 
 <p>
-    @Html.ActionLink("Add new New", "Create_new_Service")
+    @Html.ActionLink("Add new ", "Create_new_Service")
 </p>
 <table class="table">
     <tr>
@@ -45,7 +45,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Price)
         </th>
-        <th></th>
+        <th>
+            
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -68,6 +70,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <img src="@Url.Content(item.Image)" width="200" height="200" />
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit_Service", new { id=item.ServiceId }) |

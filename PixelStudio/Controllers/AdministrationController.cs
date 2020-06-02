@@ -120,30 +120,7 @@ namespace PixelStudio.Controllers
             {
                 return Redirect("~/Home/Error.cshtml");
             }
-            /*
-            string mainconnection = ConfigurationManager.ConnectionStrings["StudioConnection"].ConnectionString;
-            SqlConnection sqlConnection = new SqlConnection(mainconnection);
-            string command = "INSERT INTO [dbo].[Seveces](SName,PhotoFormat, Description, ColorType, Price, Image ) VALUES(@SName, @PhotoFormat, @Description, @ColorType, @Price, @Image)";
-            SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
-            sqlConnection.Open();
-
-            sqlCommand.Parameters.AddWithValue("@SName", photoService.Name);
-            sqlCommand.Parameters.AddWithValue("@PhotoFormat", photoService.PhotoFormat);
-            sqlCommand.Parameters.AddWithValue("@Description", photoService.Description);
-            sqlCommand.Parameters.AddWithValue("@ColorType", photoService.ColorType);
-            sqlCommand.Parameters.AddWithValue("@Price", photoService.Price);
-            if (file != null && file.ContentLength > 0)
-            {
-                string filename = Path.GetFileName(file.FileName);
-                string imgpath = Path.Combine(Server.MapPath("~/User-Images/"), filename);
-                file.SaveAs(imgpath);
-            }
-            sqlCommand.Parameters.AddWithValue("@Image", "~/User-Images/" + file.FileName);
-            sqlCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-            ViewData["Message"] = "Service" + photoService.Name + "was created successfully";
-            return View();
-            */
+            
         }
         [HttpPost]
         public ActionResult Edit_Service(int? Id, PhotoService photoService)
@@ -185,7 +162,7 @@ namespace PixelStudio.Controllers
                             Service.Description = reader["Description"].ToString();
                             Service.ColorType = reader["ColorType"].ToString();
                             Service.Price = Convert.ToDecimal(reader["Price"]);
-                            //Service.Image = reader["Image"].ToString();
+                            Service.Image = reader["Image"].ToString();
                             serviceList.Add(Service);
                             
                         }

@@ -6,6 +6,20 @@
     <title>@ViewBag.Title Pixel Studio</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <style>
+        a:link{
+            color:cadetblue;
+        }
+        a:visited {
+            color: cadetblue;
+        }
+        a:active{
+            color:forestgreen;
+        }
+        a :hover{
+            color:brown;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -37,8 +51,10 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container">
         @RenderBody()
+    </div>
+    <div>
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
