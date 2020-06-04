@@ -9,6 +9,7 @@ namespace PixelStudio.Models
     public class RegisterSystem
     {
         public string UserId { get; set; }
+
         [Display(Name = "Enter Name :")]
         public string UserName { get; set; }
         [Display(Name = "Enter Surname :")]

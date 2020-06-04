@@ -7,6 +7,7 @@ using PixelStudio.Models;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Net;
 
 namespace PixelStudio.Controllers
 {
@@ -24,9 +25,10 @@ namespace PixelStudio.Controllers
             ViewBag.Name = message;
             string mainconn = ConfigurationManager.ConnectionStrings["StudioConnection"].ConnectionString;
             SqlConnection connection = new SqlConnection(mainconn);
-            string sqlquery = "SELECT Email, UserName, Role, Password from [dbo].[Users] where Email = @Email and Password = @Password";
+            string sqlquery = "SELECT UserId, Email, UserName, Role, Password from [dbo].[Users] where Email = @Email and Password = @Password";
             connection.Open();
             SqlCommand sqlCommand = new SqlCommand(sqlquery, connection);
+
             sqlCommand.Parameters.AddWithValue("@Email", login.Email);
             sqlCommand.Parameters.AddWithValue("@Password", login.Password);
             
@@ -35,13 +37,17 @@ namespace PixelStudio.Controllers
             if (sqlDataReader.HasRows)
             {
                 
-                Session["username"] = login.Email.ToString();
+                Session["name"] = login.Email.ToString();
                 while (sqlDataReader.Read()) // построчно считываем данные
                 {
-                    string email = sqlDataReader.GetString(0);
+                    login.Id = Convert.ToInt32(sqlDataReader["UserId"]);
+                    string email = sqlDataReader.GetString(1);
+                    string name = sqlDataReader.GetString(2);
+                    string role = sqlDataReader.GetString(3);
                     
-                    string role = sqlDataReader.GetString(2);
-                    Session["username"] = email;
+                    Session["name"] = name;
+                    Session["id"] = login.Id;
+                    Session["email"] = email;
 
                     if (email == "pixelstudio.admin@gmail.com" || role == "admin" && role == "manager")
                         return Redirect("/Administration/All_Services");
@@ -61,6 +67,25 @@ namespace PixelStudio.Controllers
             connection.Close();
 
             return View();
+        }
+
+        public ActionResult SignOut()
+        {
+            try
+            {
+                if(Session["email"]!=null && Session["name"]!=null && Session["id"] != null)
+                {
+                    Session["email"] = null;
+                    Session["name"] = null;
+                    Session["id"] = null;
+                }
+                return Redirect("/Home/Home");
+            }
+            catch
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.MethodNotAllowed);
+            }
+            
         }
 
         

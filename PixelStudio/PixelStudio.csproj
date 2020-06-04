@@ -145,6 +145,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Site-Images\Service3.jpg" />
+    <Content Include="Site-Images\Service1.jpg" />
+    <Content Include="Site-Images\Service2.jpg" />
     <Content Include="Site-Images\Site.ico" />
     <Content Include="Site-Images\инстабук.jpg" />
     <Content Include="Site-Images\Календарь.jpg" />
@@ -198,6 +201,7 @@
     <Content Include="Views\Home\Service_Details.cshtml" />
     <Content Include="Views\Home\MakeOrder.cshtml" />
     <Content Include="Views\Administration\All_Orders.cshtml" />
+    <Content Include="Views\UserLogin\SignOut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

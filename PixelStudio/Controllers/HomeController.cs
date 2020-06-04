@@ -207,6 +207,10 @@ namespace PixelStudio.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            if (Session["name"] != null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
             if (photoService == null)
             {
@@ -285,7 +289,7 @@ namespace PixelStudio.Controllers
                 //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = 'ruslan.shkurenko@nure.ua') WHERE OrderId = (SELECT TOP 1 OrderId FROM [dbo].[Orders] ORDER BY OrderId DESC)
                 //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = @Email) WHERE OrderId = (SELECT TOP 1 * FROM [dbo].[Orders] ORDER BY OrderId DESC
                 SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email);
+                sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email); 
                 sqlCommand.ExecuteNonQuery();
                 sqlConnection.Close();
             }

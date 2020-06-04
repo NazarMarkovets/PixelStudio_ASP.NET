@@ -5,86 +5,88 @@
 }
 
 <style>
-    div .alert-success{
+    div .alert-success {
         padding: 10px;
         margin-bottom: 100px;
     }
 </style>
 
 
-@if (Session["username"] != null)
+@if (Session["name"] != null || Session["email"] != null)
 {
     <div class="alert-success" style="display:flex">
-        
-        <h4>Welcome @Session["username"].ToString()</h4>
+
+        <h4>Welcome @Session["email"].ToString()</h4>
         <div class="btn-group" role="group" style="padding-left:20px;">
             <button type="button" class="btn btn-secondary">@Html.ActionLink("Add new ", "Create_new_Service")</button>
             <button type="button" class="btn btn-secondary">@Html.ActionLink("Get orders ", "All_Orders")</button>
-            <button type="button" class="btn btn-secondary">Right</button>
+            <button type="button" class="btn btn-secondary">Clients</button>
         </div>
-        
-        
-    </div> 
+
+
+    </div>
+
+    <h2 class="text-center">All Services</h2>
+
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ServiceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhotoFormat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColorType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhotoFormat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ColorType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <img src="@Url.Content(item.Image)" width="200" height="200" />
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit_Service", new { id = item.ServiceId }) |
+                    @Html.ActionLink("Details", "Service_Details", new { id = item.ServiceId }) |
+                    @Html.ActionLink("Delete", "Delete_Service", new { id = item.ServiceId })
+                </td>
+            </tr>
+        }
+
+    </table>
 }
 
-<h2 class="text-center">All Services</h2>
 
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ServiceId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhotoFormat)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ColorType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServiceId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhotoFormat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ColorType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <img src="@Url.Content(item.Image)" width="200" height="200" />
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit_Service", new { id=item.ServiceId }) |
-                @Html.ActionLink("Details", "Service_Details", new {  id=item.ServiceId }) |
-                @Html.ActionLink("Delete", "Delete_Service", new { id = item.ServiceId })
-            </td>
-        </tr>
-    }
-
-</table>

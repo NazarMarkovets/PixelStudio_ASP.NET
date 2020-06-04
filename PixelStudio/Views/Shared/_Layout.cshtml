@@ -30,17 +30,38 @@
                 <ul class="nav navbar-nav">
 
                     <li>@Html.ActionLink("Home", "Home", "Home")</li>
-                    <li>@Html.ActionLink("Make Order", "Create_Order", "Home")</li>
+                    @if (Session["name"] != null)
+                    {
+                        <li>@Html.ActionLink("Shop Card", "ShopCard", "Home")</li>
+                    }
+
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>&nbsp;</li>
                     <li>@Html.ActionLink("Login", "Enter", "UserLogin")</li>
                     <li>@Html.ActionLink("Register", "Register", "UserLogin")</li>
 
+                    @if (Session["name"] != null && Session["email"] != null)
+                    {
+
+                        <li>
+                            <a href="#">Logined @Session["name"].ToString()<b>Session ID : @Session["id"].ToString()</b></a>
+                        </li>
+                        
+                        <li>@Html.ActionLink("Sign Out", "SignOut", "UserLogin")</li>
+                        
+
+
+
+
+                    }
+
                 </ul>
             </div>
         </div>
+
     </div>
     <div class="container">
+
         @RenderBody()
     </div>
     <div style="margin-top:20px; text-align:center">

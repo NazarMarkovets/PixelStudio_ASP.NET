@@ -8,7 +8,7 @@ namespace PixelStudio.Models
 {
     public class LoginSystem
     {
-        
+        public int Id { get; set; }
         [Required(ErrorMessage = "Please enter your Email")]
         [Display(Name = "Enter Email :")]
         [DataType(DataType.EmailAddress)]

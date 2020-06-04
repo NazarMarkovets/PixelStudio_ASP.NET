@@ -3,11 +3,15 @@
     ViewBag.Title = "Logined";
 }
 
-@if (Session["username"] != null)
+@if (Session["name"] != null)
 {
-    <h1>Logined</h1>
-    <h2>Welcome @Session["username"].ToString()</h2>
+    <div class="container success">
+        Logined <b>Your Session ID : @Session["id"].ToString()</b>
+    </div>
+    <hr />
+    <h3 style="padding-top:20px;">Welcome @Session["name"].ToString() </h3>
 }
+
 
 
 
