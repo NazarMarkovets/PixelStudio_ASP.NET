@@ -12,6 +12,7 @@ namespace PixelStudio.Controllers
 {
     public class UserLoginController : Controller
     {
+        public static string message = "";
         // GET: UserLogin
         public ActionResult Enter()
         {
@@ -20,6 +21,7 @@ namespace PixelStudio.Controllers
         [HttpPost]
         public ActionResult Enter(LoginSystem login)
         {
+            ViewBag.Name = message;
             string mainconn = ConfigurationManager.ConnectionStrings["StudioConnection"].ConnectionString;
             SqlConnection connection = new SqlConnection(mainconn);
             string sqlquery = "SELECT Email, UserName, Role, Password from [dbo].[Users] where Email = @Email and Password = @Password";
@@ -61,6 +63,7 @@ namespace PixelStudio.Controllers
             return View();
         }
 
+        
         [HttpPost]
         public ActionResult Register(RegisterSystem register)
         {
@@ -78,13 +81,13 @@ namespace PixelStudio.Controllers
             sqlCommand.Parameters.AddWithValue("@Password", register.Password);
             int rows = sqlCommand.ExecuteNonQuery();
             if(rows > 0)
-            {
-                ViewBag.Name = "Adding was succes"; 
+            {   
+                ViewBag.Name = "Registration successfull";
+                message = ViewBag.Name;
                 //ViewData["Message"] = "User Record Inserted Succes";
             }
     
             sqlConnection.Close();
-            
 
             return View();
         }

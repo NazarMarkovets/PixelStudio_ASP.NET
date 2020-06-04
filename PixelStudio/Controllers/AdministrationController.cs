@@ -22,23 +22,55 @@ namespace PixelStudio.Controllers
         PhotoService photoService = new PhotoService();
         List<PhotoService> serviceList = new List<PhotoService>();
 
-        
+
         public ActionResult All_Orders()
         {
+            ordersList = GetOrders();
             return View(ordersList);
         }
 
-        
+
         public ActionResult Order_Details(int orderId)
         {
             return View();
         }
 
+        public List<Order> GetOrders()
+        {
+            ordersList = new List<Order>();
+            using (var connection = new SqlConnection(mainconn))
+            {
+                connection.Open();
+                string sql = "SELECT * FROM [dbo].[Orders]";
+                //(SELECT UserId, NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice FROM Orders)  
+                using (var commant = new SqlCommand(sql, connection))
+                {
+                    using (var reader = commant.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var selectedOrder = new Order();
 
+                            
+                            selectedOrder.OrderID = Convert.ToInt32(reader["OrderId"]);
+                            selectedOrder.UserID = Convert.ToInt32(reader["UserId"]);
+                            selectedOrder.ServiceID = Convert.ToInt32(reader["ServiceId"]);
+                            selectedOrder.StatusID = Convert.ToInt32(reader["StatusId"]);
+                            selectedOrder.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
+                            selectedOrder.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
+                            ordersList.Add(selectedOrder);
+
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            return ordersList;
+        }
 
         /*-----------------------------------------SERVICE MANAGEMENT-------------------------------------*/
-        
-            
+
+
         //#SELECT ALL
         public ActionResult All_Services()
         {

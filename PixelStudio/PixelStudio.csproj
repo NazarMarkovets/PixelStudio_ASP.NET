@@ -179,7 +179,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Home.cshtml" />
-    <Content Include="Views\Home\Insert.cshtml" />
     <Content Include="Views\UserLogin\Enter.cshtml" />
     <Content Include="Views\UserLogin\Logined.cshtml" />
     <Content Include="Views\UserLogin\Register.cshtml" />
@@ -190,6 +189,15 @@
     <Content Include="Views\Administration\Create_new_Service.cshtml" />
     <Content Include="Views\Error\PageNotFound.cshtml" />
     <Content Include="Views\Administration\Edit_Service.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\About_Company.cshtml" />
+    <Content Include="Views\Home\Create_Order.cshtml" />
+    <Content Include="Views\Home\All_Services.cshtml" />
+    <Content Include="Views\Home\ShowMono.cshtml" />
+    <Content Include="Views\Home\ShowColor.cshtml" />
+    <Content Include="Views\Home\Service_Details.cshtml" />
+    <Content Include="Views\Home\MakeOrder.cshtml" />
+    <Content Include="Views\Administration\All_Orders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

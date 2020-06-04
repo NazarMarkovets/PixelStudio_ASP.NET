@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
 <style>
-
+    
 </style>
 
 <div style="display:flex">
@@ -60,7 +60,7 @@
 
             <form class="bd-search d-flex align-items-center">
                 <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;">
-                    <input type="search" class="form-control ds-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: normal; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span class="ds-dropdown-menu" role="listbox" id="algolia-autocomplete-listbox-0" style="position: absolute; top: 100%; z-index: 100; display: none; left: 0px; right: auto;">
+                    <input type="search" class="form-control ds-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: -apple-system, BlinkMacSystemFont, &quot; Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: normal; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span class="ds-dropdown-menu" role="listbox" id="algolia-autocomplete-listbox-0" style="position: absolute; top: 100%; z-index: 100; display: none; left: 0px; right: auto;">
                         <div class="ds-dataset-1"></div>
                     </span>
                 </span>
@@ -75,36 +75,18 @@
 
                     <ul class="nav bd-sidenav">
                         <li>
-                            <a href="#">Для монохромных фото</a>
+                            @Html.ActionLink("Монохромные", "ShowMono", "Home")
                         </li>
                         <li>
-                            <a href="/docs/4.0/getting-started/download/">Для цветных фото</a>
+                            @Html.ActionLink("Цветные", "ShowColor", "Home")
                         </li>
                         <li>
-                            <a href="/docs/4.0/getting-started/contents/">Для всех типов</a>
+                            @Html.ActionLink("Все типы ", "All_Services", "Home")
                         </li>
 
                     </ul>
-                </div><div class="bd-toc-item">
-                    <a class="bd-toc-link" href="" style="padding: 5px;">
-                        Сортировка
-                    </a>
-
-                    <ul class="nav bd-sidenav">
-                        <li>
-                            <a href="/docs/4.0/layout/overview/">
-                                За возрастанием цены
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/docs/4.0/layout/grid/">
-                                За убыванием цены
-                            </a>
-                        </li>
-
-                    </ul>
-
                 </div>
+
             </nav>
 
         </div>
@@ -112,7 +94,7 @@
     
 
 </div>
-<div style="width:100%; margin-top:30px;">
+<div class="home">
     <h3>Pixel Studio - компания предоставляющая услуги печати фотографий</h3><br />
     <b>Нашей целью появления на рынке стало точно не получение денег</b>
     <h4><u>Главное для нас :</u></h4>

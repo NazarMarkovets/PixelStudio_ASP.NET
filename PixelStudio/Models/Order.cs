@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PixelStudio.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,22 +8,24 @@ namespace PixelStudio.Models
 {
     public class Order
     {
-        public Order()
-        {
-            OrderID = 0;
+        
 
-        }
-
-        public Order(int orderId, int userId)
-        {
-            this.OrderID = orderId;
-            this.UserId = userId;
-        }
+        //public Order(int orderId, int userId)
+        //{
+        //    this.OrderID = orderId;
+        //    this.UserId = userId;
+        //}
 
         
         public int OrderID { get; set; }
-        public int UserId { get; set; }
+        public int UserID { get; set; }
+        public int ServiceID { get; set; }
+        public int NumbCopies { get; set; }
         public int TotalPrice { get; set; }
-        public string Status { get; set; }
+        public int StatusID { get; set; }
+
+        public HomeSet homeSet { get; set; }
+
+
     }
 }

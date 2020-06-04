@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Contact";
+}
+
+
+
+<style>
+    #contacts {
+        margin-top: 40px;
+        padding:30px;
+        border-radius:20px;
+        background-color: #ddd;
+        font: 100;
+        font-size: 16px;
+        font-family: Helvetica;
+    }
+</style>
+<div id="contacts">
+    <h2 align="center">Contacts</h2>
+
+    <u> Вы можете обратиться за помощью: </u><br />
+    <b>088-33-667</b><br />
+    <b>088-33-655</b>
+
+    <div>
+
+        <h3><u>Наш адрес:</u></h3>
+        Харьков, ул. Центральная, 25
+
+    </div>
+
+    <div class="btn btn-default" style="margin-top:20px">
+        @Html.ActionLink("Go Home", "Home", "Home")
+    </div>
+</div>
+

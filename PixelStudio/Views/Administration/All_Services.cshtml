@@ -14,17 +14,22 @@
 
 @if (Session["username"] != null)
 {
-    <div class="alert-success">
-        <h4 class="ale">Logined</h4>
+    <div class="alert-success" style="display:flex">
+        
         <h4>Welcome @Session["username"].ToString()</h4>
+        <div class="btn-group" role="group" style="padding-left:20px;">
+            <button type="button" class="btn btn-secondary">@Html.ActionLink("Add new ", "Create_new_Service")</button>
+            <button type="button" class="btn btn-secondary">@Html.ActionLink("Get orders ", "All_Orders")</button>
+            <button type="button" class="btn btn-secondary">Right</button>
+        </div>
+        
+        
     </div> 
 }
 
 <h2 class="text-center">All Services</h2>
 
-<p>
-    @Html.ActionLink("Add new ", "Create_new_Service")
-</p>
+
 <table class="table">
     <tr>
         <th>
