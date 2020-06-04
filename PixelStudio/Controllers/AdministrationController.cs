@@ -41,8 +41,8 @@ namespace PixelStudio.Controllers
             using (var connection = new SqlConnection(mainconn))
             {
                 connection.Open();
-                string sql = "SELECT * FROM [dbo].[Orders]";
-                //(SELECT UserId, NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice FROM Orders)  
+                string sql = "SELECT OrderId, UserId, NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice, Image FROM [dbo].[Orders]";
+                
                 using (var commant = new SqlCommand(sql, connection))
                 {
                     using (var reader = commant.ExecuteReader())
@@ -54,10 +54,11 @@ namespace PixelStudio.Controllers
                             
                             selectedOrder.OrderID = Convert.ToInt32(reader["OrderId"]);
                             selectedOrder.UserID = Convert.ToInt32(reader["UserId"]);
-                            selectedOrder.ServiceID = Convert.ToInt32(reader["ServiceId"]);
-                            selectedOrder.StatusID = Convert.ToInt32(reader["StatusId"]);
+                            selectedOrder.ServiceDesc = reader["ServiceName"].ToString();
+                            //selectedOrder.StatusID = Convert.ToInt32(reader["StatusId"]);
                             selectedOrder.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
                             selectedOrder.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
+                            selectedOrder.Image = reader["Image"].ToString();
                             ordersList.Add(selectedOrder);
 
                         }
@@ -252,10 +253,10 @@ namespace PixelStudio.Controllers
             if (file != null && file.ContentLength > 0)
             {
                 string filename = Path.GetFileName(file.FileName);
-                string imgpath = Path.Combine(Server.MapPath("~/User-Images/"), filename);
+                string imgpath = Path.Combine(Server.MapPath("~/Site-Images/"), filename);
                 file.SaveAs(imgpath);
             }
-            sqlCommand.Parameters.AddWithValue("@Image", "~/User-Images/" + file.FileName);
+            sqlCommand.Parameters.AddWithValue("@Image", "~/Site-Images/" + file.FileName);
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
             ViewData["Message"] = "Service" + photoService.Name + "was created successfully";

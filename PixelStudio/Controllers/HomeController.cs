@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -216,12 +217,12 @@ namespace PixelStudio.Controllers
         }
         //REWRITE после кнопки сохранить
         [HttpPost]
-        public ActionResult MakeOrder(int? Id, HomeSet homeSet)
+        public ActionResult MakeOrder(int? Id, HomeSet homeSet, HttpPostedFileBase file)
         {
 
             try
             {
-                CreateProcedure(Id, homeSet);
+                CreateProcedure(Id, homeSet, file);
                 
                 return RedirectToAction("All_Services");
             }
@@ -234,7 +235,7 @@ namespace PixelStudio.Controllers
         }
 
         
-        public HomeSet CreateProcedure(int? id, HomeSet homeSet)
+        public HomeSet CreateProcedure(int? id, HomeSet homeSet, HttpPostedFileBase file)
         {
             
             
@@ -242,7 +243,7 @@ namespace PixelStudio.Controllers
             {
                 
                 sqlConnection.Open();
-                string command = "INSERT INTO [dbo].[Orders](UserId,ServiceId,NumbCopies,TotalPrice) VALUES(@UserId, @Id, @Copies, ((SELECT Price FROM [dbo].[Seveces] WHERE serviceId = @Id)*@Copies));" +
+                string command = "INSERT INTO [dbo].[Orders](UserId,ServiceId,NumbCopies,TotalPrice, Image) VALUES(@UserId, @Id, @Copies, ((SELECT Price FROM [dbo].[Seveces] WHERE serviceId = @Id)*@Copies), @Image);" +
                                  "INSERT INTO [dbo].[Users] ([UserName],[UserSurname],[Phone],[Email],[Password]) VALUES (@UserName,@UserSurname,@Phone,@Email,@Password)";
                 SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
 
@@ -263,25 +264,31 @@ namespace PixelStudio.Controllers
                 sqlCommand.Parameters.AddWithValue("@Phone", homeSet.register.Phone);
                 sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email);
                 sqlCommand.Parameters.AddWithValue("@Password", homeSet.register.Password);
-
-                //sqlCommand.Parameters.AddWithValue("@Image", photoService.Image);
+                if (file != null && file.ContentLength > 0)
+                {
+                    string filename = Path.GetFileName(file.FileName);
+                    string imgpath = Path.Combine(Server.MapPath("~/User-Images/"), filename);
+                    file.SaveAs(imgpath);
+                }
+                sqlCommand.Parameters.AddWithValue("@Image", "~/User-Images/" + file.FileName);
+     
                 sqlCommand.ExecuteNonQuery();
 
                 sqlConnection.Close();
             }
 
-            //using (SqlConnection sqlConnection = new SqlConnection(mainconn))
-            //{
-            //    sqlConnection.Open();
-            //    string command = "UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = @Email) WHERE OrderId = (SELECT TOP 1 * FROM [dbo].[Orders] ORDER BY OrderId DESC)";
-            //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = 'ruslan.shkurenko@nure.ua') WHERE OrderId = 8;
-
-            //    SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
-
-            //    sqlCommand.ExecuteNonQuery();
-
-            //    sqlConnection.Close();
-            //}
+            using (SqlConnection sqlConnection = new SqlConnection(mainconn))
+            {
+                sqlConnection.Open();
+                string command = "UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = @Email) WHERE OrderId = (SELECT TOP 1 OrderId FROM [dbo].[Orders] ORDER BY OrderId DESC)";
+                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = 'ruslan.shkurenko@nure.ua') WHERE OrderId = 8;
+                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = 'ruslan.shkurenko@nure.ua') WHERE OrderId = (SELECT TOP 1 OrderId FROM [dbo].[Orders] ORDER BY OrderId DESC)
+                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = @Email) WHERE OrderId = (SELECT TOP 1 * FROM [dbo].[Orders] ORDER BY OrderId DESC
+                SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
+                sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email);
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
+            }
             return homeset;
         }
 

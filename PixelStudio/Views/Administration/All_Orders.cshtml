@@ -14,9 +14,9 @@
         <th>
             @Html.DisplayNameFor(model => model.UserID)
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.ServiceID)
-        </th>
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.NumbCopies)
         </th>
@@ -26,6 +26,9 @@
         <th>
             @Html.DisplayNameFor(model => model.StatusID)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceDesc)
+        </th>
         <th></th>
     </tr>
 
@@ -34,9 +37,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.UserID)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.ServiceID)
-        </td>
+        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.NumbCopies)
         </td>
@@ -47,9 +50,15 @@
             @Html.DisplayFor(modelItem => item.StatusID)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.OrderID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.OrderID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.OrderID })
+            @Html.DisplayFor(modelItem => item.ServiceDesc)
+        </td>
+        <td>
+            <img src="@Url.Content(item.Image)" width="200" height="200" />
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.OrderID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.OrderID })
         </td>
     </tr>
 }
