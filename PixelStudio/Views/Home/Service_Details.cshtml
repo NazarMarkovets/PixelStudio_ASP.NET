@@ -58,17 +58,14 @@
             @Html.DisplayFor(model => model.Price)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
 
-        <dd>
+        @*<dd>
             @Html.DisplayFor(model => model.Image)
-        </dd>
+        </dd>*@
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Buy", "MakeOrder", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Buy", "MakeOrder", new { id = Model.ServiceId }) |
     @Html.ActionLink("Back to List", "Home", "Home")
 </p>

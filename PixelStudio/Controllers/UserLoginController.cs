@@ -61,7 +61,7 @@ namespace PixelStudio.Controllers
 
             else
             {
-                ViewData["Message"] = "Login failed";
+                ViewBag.LoginFailed = "Login failed";
             }
 
             connection.Close();

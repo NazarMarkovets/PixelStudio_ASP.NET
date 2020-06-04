@@ -62,8 +62,13 @@
         </div>
     </div>
 
-
-    <h1>@Html.ViewData["Message"]</h1>
+    @if(ViewBag.LoginFailed != null)
+    {
+    <div class="alert alert-danger" style="width:500px;">
+        <h3 align="center">@ViewBag.LoginFailed</h3>
+    </div>
+    }
+    
 </div>
 }
 

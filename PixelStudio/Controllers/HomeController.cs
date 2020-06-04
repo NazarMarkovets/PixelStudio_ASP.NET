@@ -27,7 +27,7 @@ namespace PixelStudio.Controllers
         List<PhotoService> colorList = new List<PhotoService>();
 
         HomeSet homeset = new HomeSet();
-        List<HomeSet> homeSets = new List<HomeSet>();
+        List<HomeSet> homesetList = new List<HomeSet>();
         // GET: Home
         public ActionResult Home()
         {
@@ -41,14 +41,23 @@ namespace PixelStudio.Controllers
         {
             return View();
         }
-        //public ActionResult Create_Order()
-        //{
-        //    homeSets = GetServices();
-        //    //ViewBag.Services = new SelectList();
+        public ActionResult ShopCard()
+        {
+            try
+            {
+                SessionParameter sessionParameter = new SessionParameter();
+                sessionParameter.Name = Session["Id"].ToString();
+
+                ordersList = GetAllOrders(sessionParameter);
+                return View(ordersList);
+            }
+            catch
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.MethodNotAllowed);
+            }
             
-        //    return View();
-        //}   
-        
+        }
+
         public ActionResult ShowMono()
         {
             monoList = ShowAllMonoServices();
@@ -169,6 +178,37 @@ namespace PixelStudio.Controllers
             return serviceList;
         }
 
+        public List<Order> GetAllOrders(SessionParameter sessionParameter)
+        {
+            Order order = new Order();
+            
+            using (var connection = new SqlConnection(mainconn))
+            {
+                connection.Open();
+                string sql = "SELECT NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName," +
+                             "TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId= Id)as CurrentStatus " +
+                             "FROM [dbo].[Orders] WHERE UserId = @SessionId";
+                //SELECT NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId= Id)as CurrentStatus FROM [dbo].[Orders] WHERE UserId = 6014;
+                SqlCommand command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@SessionId", int.Parse(sessionParameter.Name));
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        order.ServiceDesc = reader["ServiceName"].ToString();
+                        order.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
+                        order.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
+                        order.Image = reader["Image"].ToString();
+                        
+                        
+                        ordersList.Add(order);
+                    }
+                    connection.Close();
+                }
+            }
+
+            return ordersList;
+        }
 
         public PhotoService GetServiceById(int? id)
         {
@@ -236,7 +276,7 @@ namespace PixelStudio.Controllers
             
             return View();
         }
-        //REWRITE после кнопки сохранить
+        
         [HttpPost]
         public ActionResult MakeOrder(int? Id, HomeSet homeSet, HttpPostedFileBase file)
         {
@@ -274,7 +314,6 @@ namespace PixelStudio.Controllers
             }
             
         }
-
 
         public HomeSet CreateProcedure(int? id, HomeSet homeSet, HttpPostedFileBase file)
         {
@@ -332,7 +371,6 @@ namespace PixelStudio.Controllers
             }
             return homeset;
         }
-
         public HomeSet CreateProcedureForLogined(int? id, HomeSet homeSet, HttpPostedFileBase file, SessionParameter sessionParameter)
         {
             //sessionParameter.Name = Session["Na"]
