@@ -9,7 +9,7 @@
     <link href="~/Content/Site.css" rel="stylesheet" />
     <style>
 
-        
+
     </style>
 
     <link rel="shortcut icon" href="~/image/Site.ico" type="image/x-icon">
@@ -39,16 +39,17 @@
                     <li>&nbsp;</li>
                     <li>@Html.ActionLink("Login", "Enter", "UserLogin")</li>
                     <li>@Html.ActionLink("Register", "Register", "UserLogin")</li>
-
+                    <li style="width:100px;">&nbsp;</li>
+                    <li>&nbsp;</li>
                     @if (Session["name"] != null && Session["email"] != null)
                     {
 
-                        <li>
-                            <a href="#">Logined @Session["name"].ToString()<b>Session ID : @Session["id"].ToString()</b></a>
+                        <li  style="background-color:#5bc0de00">
+                            <a href="#" class="Role">@Session["name"].ToString()   <b>Session ID : @Session["id"].ToString()</b></a>
                         </li>
-                        
+
                         <li>@Html.ActionLink("Sign Out", "SignOut", "UserLogin")</li>
-                        
+
                     }
 
                 </ul>

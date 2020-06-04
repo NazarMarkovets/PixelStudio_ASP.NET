@@ -4,10 +4,10 @@
     ViewBag.Title = "Create new Service";
 }
 
-<h2>Create_new_Service</h2>
+<h2>Create new Service</h2>
 
 
-@using (Html.BeginForm("Create new Service", "Administration" , FormMethod.Post,new {enctype="multipart/form-data" }))
+@using (Html.BeginForm("Create_new_Service", "Administration" , FormMethod.Post,new {enctype="multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     

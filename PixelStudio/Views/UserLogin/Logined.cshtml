@@ -5,11 +5,22 @@
 
 @if (Session["name"] != null)
 {
-    <div class="container success">
-        Logined <b>Your Session ID : @Session["id"].ToString()</b>
-    </div>
+    @*<div class="container success">
+            Logined <b>Your Session ID : @Session["id"].ToString()</b>
+        </div>*@
+
+    <h2 style="padding-top:40px;">Здравствуйте, @Session["name"].ToString() </h2>
     <hr />
-    <h3 style="padding-top:20px;">Welcome @Session["name"].ToString() </h3>
+    <div class="container" style="margin-top:40px;">
+        <b><h3>Вся наша команда приветствует вас и готова к работе.</h3></b><br />
+        Ваш заказ находится от исполнения в пару кликов. Давайте это исправим!
+        <h3>Может сразу к каталогу?</h3>
+        @Html.ActionLink("Ко всем услугам", "All_Services", "Home")
+
+    </div>
+    <div class="btn btn-default" style="text-decoration:none; margin-top:20%;">
+        @Html.ActionLink("Go Home", "Home", "Home")
+    </div>
 }
 
 

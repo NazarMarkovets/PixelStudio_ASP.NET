@@ -207,7 +207,7 @@ namespace PixelStudio.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (Session["name"] != null)
+            if (Session["Id"] != null)
             {
                 return RedirectToAction("MakeOrderForEnteredUser", new{ Id = Id});
             }
@@ -233,7 +233,7 @@ namespace PixelStudio.Controllers
             {
                 RedirectToAction("Home");
             }
-
+            
             return View();
         }
         //REWRITE после кнопки сохранить
@@ -255,18 +255,21 @@ namespace PixelStudio.Controllers
 
         }
         [HttpPost]
-        public ActionResult MakeOrderForEnteredUser(int? Id, HomeSet homeSet, HttpPostedFileBase file, SessionParameter sessionParameter)
+        public ActionResult MakeOrderForEnteredUser(int? Id, HomeSet homeSet, HttpPostedFileBase file)
         {
 
             try
             {
+                SessionParameter sessionParameter = new SessionParameter();
+                sessionParameter.Name = Session["Id"].ToString();
+                
                 CreateProcedureForLogined(Id, homeSet, file, sessionParameter);
-                sessionParameter.Name = Session["name"].ToString();
-                return RedirectToAction(sessionParameter.ToString());
+                
+                return RedirectToAction("All_Services");
             }
             catch
             {
-                return new HttpStatusCodeResult(HttpStatusCode.ServiceUnavailable);
+                return View();
 
             }
             
@@ -329,6 +332,7 @@ namespace PixelStudio.Controllers
             }
             return homeset;
         }
+
         public HomeSet CreateProcedureForLogined(int? id, HomeSet homeSet, HttpPostedFileBase file, SessionParameter sessionParameter)
         {
             //sessionParameter.Name = Session["Na"]
@@ -337,27 +341,27 @@ namespace PixelStudio.Controllers
             {
 
                 sqlConnection.Open();
-                string command = "INSERT INTO [dbo].[Orders](UserId,ServiceId,NumbCopies,TotalPrice, Image) VALUES(@UserId, @Id, @Copies, ((SELECT Price FROM [dbo].[Seveces] WHERE serviceId = @Id)*@Copies), @Image);" +
-                                 "INSERT INTO [dbo].[Users] ([UserName],[UserSurname],[Phone],[Email],[Password]) VALUES (@UserName,@UserSurname,@Phone,@Email,@Password)";
+                string command = "INSERT INTO [dbo].[Orders](UserId,ServiceId,NumbCopies,TotalPrice, Image) VALUES(@UserId, @Id, @Copies, ((SELECT Price FROM [dbo].[Seveces] WHERE serviceId = @Id)*@Copies), @Image)";
+                //INSERT INTO [dbo].[Users] ([UserName],[UserSurname],[Phone],[Email],[Password]) VALUES (@UserName,@UserSurname,@Phone,@Email,@Password)
                 SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
 
-                Random random = new Random();
-                string encriptValue = (random.Next(100, 400).ToString());
-                var Enctipt = FormsAuthentication.HashPasswordForStoringInConfigFile(encriptValue, "SHA1");
-                Enctipt = Enctipt.Substring(0, 12);
+                //Random random = new Random();
+                //string encriptValue = (random.Next(100, 400).ToString());
+                //var Enctipt = FormsAuthentication.HashPasswordForStoringInConfigFile(encriptValue, "SHA1");
+                //Enctipt = Enctipt.Substring(0, 12);
 
-                homeSet.register.Password = Enctipt;
-                homeSet.code = random.Next(100000, 200000);
-                sqlCommand.Parameters.AddWithValue("@UserId", homeSet.code);
+                
+                sqlCommand.Parameters.AddWithValue("@UserId", int.Parse(sessionParameter.Name));
                 sqlCommand.Parameters.AddWithValue("@Id", id);
                 sqlCommand.Parameters.AddWithValue("@TotalPrice", homeSet.Price);
-
                 sqlCommand.Parameters.AddWithValue("@Copies", homeSet.copies);
-                sqlCommand.Parameters.AddWithValue("@UserName", homeSet.register.UserName);
-                sqlCommand.Parameters.AddWithValue("@UserSurname", homeSet.register.UserSurname);
-                sqlCommand.Parameters.AddWithValue("@Phone", homeSet.register.Phone);
-                sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email);
-                sqlCommand.Parameters.AddWithValue("@Password", homeSet.register.Password);
+
+                //sqlCommand.Parameters.AddWithValue("@UserName", homeSet.register.UserName);
+                //sqlCommand.Parameters.AddWithValue("@UserSurname", homeSet.register.UserSurname);
+                //sqlCommand.Parameters.AddWithValue("@Phone", homeSet.register.Phone);
+                //sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email);
+                //sqlCommand.Parameters.AddWithValue("@Password", homeSet.register.Password);
+
                 if (file != null && file.ContentLength > 0)
                 {
                     string filename = Path.GetFileName(file.FileName);
@@ -368,19 +372,6 @@ namespace PixelStudio.Controllers
 
                 sqlCommand.ExecuteNonQuery();
 
-                sqlConnection.Close();
-            }
-
-            using (SqlConnection sqlConnection = new SqlConnection(mainconn))
-            {
-                sqlConnection.Open();
-                string command = "UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = @Email) WHERE OrderId = (SELECT TOP 1 OrderId FROM [dbo].[Orders] ORDER BY OrderId DESC)";
-                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = 'ruslan.shkurenko@nure.ua') WHERE OrderId = 8;
-                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = 'ruslan.shkurenko@nure.ua') WHERE OrderId = (SELECT TOP 1 OrderId FROM [dbo].[Orders] ORDER BY OrderId DESC)
-                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = @Email) WHERE OrderId = (SELECT TOP 1 * FROM [dbo].[Orders] ORDER BY OrderId DESC
-                SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
-                sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email);
-                sqlCommand.ExecuteNonQuery();
                 sqlConnection.Close();
             }
             return homeset;

@@ -15,23 +15,23 @@
             @Html.DisplayNameFor(model => model.ServiceId)
         </th>*@
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Название услуги:
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PhotoFormat)
+            Формат фото:
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
+        </th>*@
+        @*<th>
             @Html.DisplayNameFor(model => model.ColorType)
-        </th>
+        </th>*@
         <th>
-            @Html.DisplayNameFor(model => model.Price)
+            Цена за 1 шт.
         </th>
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Image)
-        </th>
+        </th>*@
         <th></th>
     </tr>
 
@@ -46,17 +46,17 @@
         <td>
             @Html.DisplayFor(modelItem => item.PhotoFormat)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
+        </td>*@
+        @*<td>
             @Html.DisplayFor(modelItem => item.ColorType)
-        </td>
+        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Image)
+            <img src="@Url.Content(item.Image)" width="200" height="200" />
         </td>
         <td>
             @Html.ActionLink("Buy", "MakeOrder", new { id=item.ServiceId}) 
