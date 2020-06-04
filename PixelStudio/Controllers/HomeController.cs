@@ -43,19 +43,48 @@ namespace PixelStudio.Controllers
         }
         public ActionResult ShopCard()
         {
-            try
-            {
-                SessionParameter sessionParameter = new SessionParameter();
-                sessionParameter.Name = Session["Id"].ToString();
-
-                ordersList = GetAllOrders(sessionParameter);
+            //SessionParameter sessionParameter = new SessionParameter();
+            //sessionParameter.Name = Session["Id"].ToString();
+            ordersList = GetAllOrders();
                 return View(ordersList);
-            }
-            catch
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.MethodNotAllowed);
-            }
+
+        }
+
+        public List<Order> GetAllOrders()
+        {
+            //string sql = "SELECT NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId= Id)as CurrentStatus FROM [dbo].[Orders] WHERE UserId = @UserId;";
+            //SELECT NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId= Id)as CurrentStatus FROM [dbo].[Orders] WHERE UserId = 6014;
+
+            ordersList = new List<Order>();
             
+            using (var connection = new SqlConnection(mainconn))
+            {
+                connection.Open();
+                string tmp = Convert.ToString(Session["Id"]);
+                string sql = "SELECT OrderId, NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId = Id)as CurrentStatus FROM [dbo].[Orders] WHERE UserId =" + tmp;
+                using (var commant = new SqlCommand(sql, connection))
+                {
+                    using (var reader = commant.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Order order = new Order();
+                            order.OrderID = Convert.ToInt32(reader["OrderId"]);
+                            order.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
+                            order.ServiceDesc = reader["ServiceName"].ToString();
+                            order.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
+                            order.StatusDesc = reader["CurrentStatus"].ToString();
+                            order.Image = reader["Image"].ToString();
+                            ordersList.Add(order);
+
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            return ordersList;
+
+
         }
 
         public ActionResult ShowMono()
@@ -178,37 +207,7 @@ namespace PixelStudio.Controllers
             return serviceList;
         }
 
-        public List<Order> GetAllOrders(SessionParameter sessionParameter)
-        {
-            Order order = new Order();
-            
-            using (var connection = new SqlConnection(mainconn))
-            {
-                connection.Open();
-                string sql = "SELECT NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName," +
-                             "TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId= Id)as CurrentStatus " +
-                             "FROM [dbo].[Orders] WHERE UserId = @SessionId";
-                //SELECT NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId= Id)as CurrentStatus FROM [dbo].[Orders] WHERE UserId = 6014;
-                SqlCommand command = new SqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@SessionId", int.Parse(sessionParameter.Name));
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        order.ServiceDesc = reader["ServiceName"].ToString();
-                        order.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
-                        order.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
-                        order.Image = reader["Image"].ToString();
-                        
-                        
-                        ordersList.Add(order);
-                    }
-                    connection.Close();
-                }
-            }
-
-            return ordersList;
-        }
+        
 
         public PhotoService GetServiceById(int? id)
         {
@@ -259,6 +258,7 @@ namespace PixelStudio.Controllers
             
             return View();
         }
+
         public ActionResult MakeOrderForEnteredUser(int? Id)
         {
             if (Id == null)

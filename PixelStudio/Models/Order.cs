@@ -24,6 +24,7 @@ namespace PixelStudio.Models
         public int NumbCopies { get; set; }
         public int TotalPrice { get; set; }
         public int StatusID { get; set; }
+        public string StatusDesc { get; set; }
         public string Image { get; set; }
         //public HomeSet homeSet { get; set; }
 

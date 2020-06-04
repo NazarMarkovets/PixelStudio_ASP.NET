@@ -1,0 +1,66 @@
+﻿@model IEnumerable<PixelStudio.Models.Order>
+
+@{
+    ViewBag.Title = "ShopCard";
+}
+
+<h2>ShopCard</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Номер заказа:
+        </th>
+        <th>
+            Статус заказа:
+        </th>
+        
+        <th>
+            Заказанная услуга
+        </th>
+        <th>
+            Количество копий
+        </th>
+        <th>
+            Сумарная цена
+        </th>
+        
+        <th>
+            Ваша фотография
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusDesc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ServiceDesc)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumbCopies)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalPrice)
+        </td>
+        <td>
+            <img src="@Url.Content(item.Image)" width="200" height="200" />
+        </td>
+        
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.OrderID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.OrderID })
+        </td>
+    </tr>
+}
+
+</table>

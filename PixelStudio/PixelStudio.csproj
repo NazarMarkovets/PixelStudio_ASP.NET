@@ -203,7 +203,7 @@
     <Content Include="Views\Administration\All_Orders.cshtml" />
     <Content Include="Views\UserLogin\SignOut.cshtml" />
     <Content Include="Views\Home\MakeOrderForEnteredUser.cshtml" />
-    <Content Include="Views\Home\GetAllOrders.cshtml" />
+    <Content Include="Views\Home\ShopCard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
