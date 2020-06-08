@@ -33,6 +33,6 @@ namespace PixelStudio.ViewModels
         public int copies { get; set; }
         public int? UserId { get; set; }
         public RegisterSystem register { get; set; }
-
+        public int OrderNo { get; set; }
     }
 }

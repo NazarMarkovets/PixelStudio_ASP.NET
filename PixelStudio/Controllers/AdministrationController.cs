@@ -125,7 +125,16 @@ namespace PixelStudio.Controllers
             }
             return ordersList;
         }
-        
+
+
+        /*-----------------------------------------USER MANAGEMENT-------------------------------------*/
+        Users users = new Users();
+        List<Users> usersList = new List<Users>();
+        public ActionResult All_Users()
+        {
+            ordersList = GetOrders();
+            return View(ordersList);
+        } //DONE
 
         /*-----------------------------------------SERVICE MANAGEMENT-------------------------------------*/
 
@@ -181,8 +190,6 @@ namespace PixelStudio.Controllers
             }
             return View(photoService);
         }
-
-
 
 
         [HttpPost]
@@ -293,8 +300,7 @@ namespace PixelStudio.Controllers
 
                 return Service;
         }
-        
-        
+        //#Save changes
         public PhotoService Save(PhotoService photoService, HttpPostedFileBase file)
         {
 
@@ -322,8 +328,7 @@ namespace PixelStudio.Controllers
        
             return photoService;
         }
-        
-   
+        //#Delete service
         public PhotoService Delete(int? Id)
         {
             PhotoService Service = new PhotoService();
@@ -341,7 +346,7 @@ namespace PixelStudio.Controllers
             }
             return Service;
         }
-
+        //#Update
         public PhotoService Update_Service(int?id, PhotoService photoService)
         {
 

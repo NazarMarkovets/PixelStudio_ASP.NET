@@ -249,7 +249,8 @@ namespace PixelStudio.Controllers
             }
             if (Session["Id"] != null)
             {
-                return RedirectToAction("MakeOrderForEnteredUser", new{ Id = Id});
+                GetOrderNo();
+                return RedirectToAction("MakeOrderForEnteredUser", new{ Id = Id, homeset.OrderNo});
             }
 
             if (photoService == null)
@@ -260,7 +261,7 @@ namespace PixelStudio.Controllers
             return View();
         }
 
-        public ActionResult MakeOrderForEnteredUser(int? Id)
+        public ActionResult MakeOrderForEnteredUser(int? Id, HomeSet homeset)
         {
             if (Id == null)
             {
@@ -301,9 +302,10 @@ namespace PixelStudio.Controllers
 
             try
             {
+                GetOrderNo();
                 SessionParameter sessionParameter = new SessionParameter();
                 sessionParameter.Name = Session["Id"].ToString();
-                
+                //CheckUser(sessionParameter);
                 CreateProcedureForLogined(Id, homeSet, file, sessionParameter);
                 
                 return RedirectToAction("All_Services");
@@ -323,7 +325,7 @@ namespace PixelStudio.Controllers
             var Enctipt = FormsAuthentication.HashPasswordForStoringInConfigFile(encriptValue, "SHA1");
             Enctipt = Enctipt.Substring(0, 12);
             homeSet.register.Password = Enctipt;
-
+            int ClientID;
             using (SqlConnection sqlConnection = new SqlConnection(mainconn))
             {
                 
@@ -336,25 +338,45 @@ namespace PixelStudio.Controllers
                 sqlCommand.Parameters.AddWithValue("@Phone", homeSet.register.Phone);
                 sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email);
                 sqlCommand.Parameters.AddWithValue("@Password", homeSet.register.Password);
-
                 sqlCommand.ExecuteNonQuery();
 
+
+                sqlConnection.Close();
+            }
+            using (SqlConnection sqlConnection = new SqlConnection(mainconn))
+            {
+
+                sqlConnection.Open();
+                string sql = "SELECT UserId FROM [dbo].[Users] WHERE Email = @Email";
+
+                using (var commant = new SqlCommand(sql, sqlConnection))
+                {
+                    commant.Parameters.AddWithValue("@Email", homeSet.register.Email);
+                    using (var reader = commant.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            homeset.UserId = Convert.ToInt32(reader.GetValue(0));
+
+                        }
+                        reader.Close();
+                    }
+
+                }
                 sqlConnection.Close();
             }
 
             using (SqlConnection sqlConnection = new SqlConnection(mainconn))
             {
+                int UserID = (int)homeset.UserId;
                 sqlConnection.Open();
-                string cmd = "INSERT INTO [dbo].[Orders](UserId,NumbCopies,TotalPrice, Image) VALUES((SELECT TOP 1 UserId FROM [dbo].[Users] ORDER BY UserId DESC), @Copies, ((SELECT Price FROM [dbo].[Seveces] WHERE serviceId = @Id)*@Copies), @Image);";
+                string cmd = "INSERT INTO [dbo].[Orders](UserId,TotalPrice) VALUES(@UserId, ((SELECT Price FROM [dbo].[Seveces] WHERE serviceId = @Id)*@Copies));" +
+                             "INSERT INTO [dbo].[Order_Services](serviceID, orderID, Photo,NumbCopies ) VALUES (@Id,(SELECT OrderId FROM [dbo].[Orders] WHERE UserId = @UserId AND StatusId = 1), @Image ,@Copies);";
+                             
                 SqlCommand sqlCommand = new SqlCommand(cmd, sqlConnection);
-                //string command = "UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = @Email) WHERE OrderId = (SELECT TOP 1 OrderId FROM [dbo].[Orders] ORDER BY OrderId DESC)";
-                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = 'ruslan.shkurenko@nure.ua') WHERE OrderId = 8;
-                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = 'ruslan.shkurenko@nure.ua') WHERE OrderId = (SELECT TOP 1 OrderId FROM [dbo].[Orders] ORDER BY OrderId DESC)
-                //UPDATE [dbo].[Orders] SET UserId = (SELECT UserId FROM [dbo].[Users] WHERE Email = @Email) WHERE OrderId = (SELECT TOP 1 * FROM [dbo].[Orders] ORDER BY OrderId DESC
-
                 sqlCommand.Parameters.AddWithValue("@Id", id);
-                sqlCommand.Parameters.AddWithValue("@TotalPrice", homeSet.Price);
                 sqlCommand.Parameters.AddWithValue("@Copies", homeSet.copies);
+                sqlCommand.Parameters.AddWithValue("@UserId", UserID);
                 if (file != null && file.ContentLength > 0)
                 {
                     string filename = Path.GetFileName(file.FileName);
@@ -371,48 +393,94 @@ namespace PixelStudio.Controllers
 
         public HomeSet CreateProcedureForLogined(int? id, HomeSet homeSet, HttpPostedFileBase file, SessionParameter sessionParameter)
         {
-            //sessionParameter.Name = Session["Na"]
-
-            using (SqlConnection sqlConnection = new SqlConnection(mainconn))
+            int orderNumber = Convert.ToInt32(homeset.OrderNo);
+            sessionParameter.Name = (Session["id"]).ToString();
+            if(orderNumber == 0)
             {
-
-                sqlConnection.Open();
-                string command = "INSERT INTO [dbo].[Orders](UserId,ServiceId,NumbCopies,TotalPrice, Image) VALUES(@UserId, @Id, @Copies, ((SELECT Price FROM [dbo].[Seveces] WHERE serviceId = @Id)*@Copies), @Image)";
-                //INSERT INTO [dbo].[Users] ([UserName],[UserSurname],[Phone],[Email],[Password]) VALUES (@UserName,@UserSurname,@Phone,@Email,@Password)
-                SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
-
-                //Random random = new Random();
-                //string encriptValue = (random.Next(100, 400).ToString());
-                //var Enctipt = FormsAuthentication.HashPasswordForStoringInConfigFile(encriptValue, "SHA1");
-                //Enctipt = Enctipt.Substring(0, 12);
-
-                
-                sqlCommand.Parameters.AddWithValue("@UserId", int.Parse(sessionParameter.Name));
-                sqlCommand.Parameters.AddWithValue("@Id", id);
-                sqlCommand.Parameters.AddWithValue("@TotalPrice", homeSet.Price);
-                sqlCommand.Parameters.AddWithValue("@Copies", homeSet.copies);
-
-                //sqlCommand.Parameters.AddWithValue("@UserName", homeSet.register.UserName);
-                //sqlCommand.Parameters.AddWithValue("@UserSurname", homeSet.register.UserSurname);
-                //sqlCommand.Parameters.AddWithValue("@Phone", homeSet.register.Phone);
-                //sqlCommand.Parameters.AddWithValue("@Email", homeSet.register.Email);
-                //sqlCommand.Parameters.AddWithValue("@Password", homeSet.register.Password);
-
-                if (file != null && file.ContentLength > 0)
+                using (SqlConnection sqlConnection = new SqlConnection(mainconn))
                 {
-                    string filename = Path.GetFileName(file.FileName);
-                    string imgpath = Path.Combine(Server.MapPath("~/User-Images/"), filename);
-                    file.SaveAs(imgpath);
+
+                    sqlConnection.Open();
+                    string command = "INSERT INTO [dbo].[Orders](UserId,TotalPrice) VALUES(@UserId, ((SELECT Price FROM [dbo].[Seveces] WHERE serviceId = @Id)*@Copies));" +
+                                     "INSERT INTO [dbo].[Order_Services](serviceID, orderID, Photo,NumbCopies ) VALUES (@Id,(SELECT OrderId FROM [dbo].[Orders] WHERE UserId = @UserId AND StatusId = 1), @Image, @Copies);";
+
+                    SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
+                    sqlCommand.Parameters.AddWithValue("@UserId", int.Parse(sessionParameter.Name));
+                    sqlCommand.Parameters.AddWithValue("@Id", id);
+                    //sqlCommand.Parameters.AddWithValue("@TotalPrice", homeSet.Price);
+                    sqlCommand.Parameters.AddWithValue("@Copies", homeSet.copies);
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        string filename = Path.GetFileName(file.FileName);
+                        string imgpath = Path.Combine(Server.MapPath("~/User-Images/"), filename);
+                        file.SaveAs(imgpath);
+                    }
+                    sqlCommand.Parameters.AddWithValue("@Image", "~/User-Images/" + file.FileName);
+
+                    sqlCommand.ExecuteNonQuery();
+
+                    sqlConnection.Close();
                 }
-                sqlCommand.Parameters.AddWithValue("@Image", "~/User-Images/" + file.FileName);
-
-                sqlCommand.ExecuteNonQuery();
-
-                sqlConnection.Close();
+                return homeset;
             }
-            return homeset;
+            else
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(mainconn))
+                {
+                    //int orderNumber = Convert.ToInt32(homeset.OrderNo);
+                    sqlConnection.Open();
+                    string command = "INSERT INTO [dbo].[Order_Services](serviceID, orderID, Photo,NumbCopies ) VALUES (@Id,@OrderId, @Image, @Copies);" +
+                                     "UPDATE [dbo].[Orders] SET TotalPrice = TotalPrice + ((SELECT Price From [dbo].[Seveces] WHERE serviceId = @Id)*@Copies);";
+
+                    SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
+                    sqlCommand.Parameters.AddWithValue("@UserId", int.Parse(sessionParameter.Name));
+                    sqlCommand.Parameters.AddWithValue("@Id", id);
+                    sqlCommand.Parameters.AddWithValue("@OrderId", orderNumber);
+                    sqlCommand.Parameters.AddWithValue("@Copies", homeSet.copies);
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        string filename = Path.GetFileName(file.FileName);
+                        string imgpath = Path.Combine(Server.MapPath("~/User-Images/"), filename);
+                        file.SaveAs(imgpath);
+                    }
+                    sqlCommand.Parameters.AddWithValue("@Image", "~/User-Images/" + file.FileName);
+
+                    sqlCommand.ExecuteNonQuery();
+
+                    sqlConnection.Close();
+                }
+                return homeset;
+            }
+            
         }
 
+        
+        public void GetOrderNo()
+        {
+            
+            using (var connection = new SqlConnection(mainconn))
+            {
+                connection.Open();
+                string tmp = Convert.ToString(Session["Id"]);
+                string sql = "SELECT TOP 1 OrderId FROM [dbo].[Orders] WHERE UserId =" + tmp + "AND StatusId = 1";
+                using (var commant = new SqlCommand(sql, connection))
+                {
+                    using (var reader = commant.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            homeset.OrderNo = Convert.ToInt32(reader.GetValue(0));
+
+                        }
+                        reader.Close();
+                    }
+                    connection.Close();
+                }
+
+            }
+            
+
+        }
 
     }
 
