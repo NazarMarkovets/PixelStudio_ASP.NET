@@ -1,0 +1,90 @@
+﻿@model PixelStudio.Models.Order
+
+@{
+    ViewBag.Title = "Order_Details";
+}
+
+<h2>Order_Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Номер заказа:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderID)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.ServiceID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceID)
+        </dd>*@
+
+        <dt>
+            Заказанная услуга:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceDesc)
+        </dd>
+
+        <dt>
+            Количество копий:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumbCopies)
+        </dd>
+
+        <dt>
+            Цена:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalPrice)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.StatusID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StatusID)
+        </dd>*@
+
+        <dt>
+            Текущий статус заказа:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StatusDesc)
+        </dd>
+
+        <dt>
+            Заказчик:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserInfo)
+        </dd>
+
+        <dt style="padding-top:30px;">
+            Предоставленное фото:
+        </dt>
+
+        <dd>
+            <img  style="border-radius:30px; margin-top:30px;"  src="@Url.Content(Model.Image)" width="500" height="500" />
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

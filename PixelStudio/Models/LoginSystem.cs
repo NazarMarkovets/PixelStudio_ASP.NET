@@ -17,5 +17,6 @@ namespace PixelStudio.Models
         [Display(Name = "Enter Password :")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        public Users users { get; set; }
     }
 }

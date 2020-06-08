@@ -19,7 +19,7 @@
         </dd>*@
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            Название услуги:
         </dt>
 
         <dd>
@@ -27,15 +27,15 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PhotoFormat)
+            Подходящий формат:
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PhotoFormat)
+            @Html.DisplayFor(model => model.PhotoFormat) 
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            Описание:
         </dt>
 
         <dd>
@@ -43,7 +43,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ColorType)
+            Цветовая схема:
         </dt>
 
         <dd>
@@ -51,7 +51,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Price)
+            Цена за для 1 фото:
         </dt>
 
         <dd>
@@ -59,9 +59,9 @@
         </dd>
 
 
-        @*<dd>
-            @Html.DisplayFor(model => model.Image)
-        </dd>*@
+        <dd style="padding-top:20px; border:inherit;">
+            <img style="border-radius:20px" src="@Url.Content(Model.Image)"  width="500" height="500"/>
+        </dd>
 
     </dl>
 </div>

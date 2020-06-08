@@ -145,18 +145,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Site-Images\Service3.jpg" />
-    <Content Include="Site-Images\Service1.jpg" />
-    <Content Include="Site-Images\Service2.jpg" />
     <Content Include="Site-Images\Site.ico" />
     <Content Include="Site-Images\инстабук.jpg" />
     <Content Include="Site-Images\Календарь.jpg" />
     <Content Include="Site-Images\рамка.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Site-Images\печать 2.webp" />
-    <Content Include="Site-Images\печать.webp" />
-    <Content Include="Site-Images\черно белая.webp" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -204,6 +198,7 @@
     <Content Include="Views\UserLogin\SignOut.cshtml" />
     <Content Include="Views\Home\MakeOrderForEnteredUser.cshtml" />
     <Content Include="Views\Home\ShopCard.cshtml" />
+    <Content Include="Views\Administration\Order_Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -29,7 +29,7 @@
     <h2 class="text-center">All Services</h2>
 
 
-    <table class="table" >
+    <table class="table" style="display:flex">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ServiceId)
@@ -78,10 +78,10 @@
                 <td>
                     <img src="@Url.Content(item.Image)" width="200" height="200" />
                 </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit_Service", new { id = item.ServiceId }) |
-                    @Html.ActionLink("Details", "Service_Details", new { id = item.ServiceId }) |
-                    @Html.ActionLink("Delete", "Delete_Service", new { id = item.ServiceId })
+                <td style="display:inline-flex;">
+                    @Html.ActionLink("Edit", "Edit_Service", new { id = item.ServiceId } , new { @class = "btn btn-warning"})
+                    @Html.ActionLink("Details", "Service_Details", new { id = item.ServiceId }, new { @class = "btn btn-info" })
+                    @Html.ActionLink("Delete", "Delete_Service", new { id = item.ServiceId }, new { @class = "btn btn-danger" })
                 </td>
             </tr>
         }

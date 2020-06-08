@@ -1,17 +1,17 @@
 ﻿@model PixelStudio.Models.PhotoService
 
 @{
-    ViewBag.Title = "Service_Details";
+    ViewBag.Title = "Service Details";
 }
 
-<h2>Service_Details</h2>
+<h2>Service Details</h2>
 
 <div>
     <h4>PhotoService</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ServiceId)
+            Код услуги:
         </dt>
 
         <dd>
@@ -19,7 +19,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            Название услуги:
         </dt>
 
         <dd>
@@ -27,7 +27,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PhotoFormat)
+            Формат фото:
         </dt>
 
         <dd>
@@ -35,7 +35,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            Описание:
         </dt>
 
         <dd>
@@ -43,7 +43,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ColorType)
+            Подходящая цветовая схема:
         </dt>
 
         <dd>
@@ -51,13 +51,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Price)
+            Цена за 1 шт.
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Price)
         </dd>
+        <dt>
+            Изображение
+        </dt>
 
+        <dd style="padding-top:20px; border:inherit;">
+            <img style="border-radius:20px" src="@Url.Content(Model.Image)" width="500" height="500" />
+        </dd>
     </dl>
 </div>
 <p>

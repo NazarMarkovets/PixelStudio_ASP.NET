@@ -3,64 +3,65 @@
 @{
     ViewBag.Title = "All Orders";
 }
-<h4>Welcome @Session["email"].ToString()</h4>
-<h2>All Orders</h2>
 
-@*<p>
-    @Html.ActionLink("Create New", "Create")
-</p>*@
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.UserID)
-        </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.ServiceID)
-        </th>*@
-        <th>
-            @Html.DisplayNameFor(model => model.NumbCopies)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TotalPrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StatusID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ServiceDesc)
-        </th>
-        <th></th>
-    </tr>
+@if (Session["email"] != null)
+{
+    <h4>Welcome @Session["email"].ToString()</h4>
+    <h2>All Orders</h2>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserID)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.ServiceID)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.NumbCopies)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TotalPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StatusID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ServiceDesc)
-        </td>
-        <td>
-            <img src="@Url.Content(item.Image)" width="200" height="200" />
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }) |
-            @Html.ActionLink("Details", "Details", new { id = item.OrderID }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.OrderID })
-        </td>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>
+                 Номер заказа:
+            </th>
+            <th>
+                Номер пользователя:
+            </th>
+            
+            <th>
+                Количество копий:
+            </th>
+            <th>
+                Сумарная цена:
+            </th>
+            <th>
+                Статус заказа:
+            </th>
+            <th>Фото пользователя:</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserID)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumbCopies)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceDesc)
+                </td>
+                <td>
+                    <img src="@Url.Content(item.Image)" width="200" height="200" />
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Details", "Order_Details", new { id = item.OrderID }, new { @class = "btn btn-info" }) 
+                    @Html.ActionLink("Delete", "Delete", new { id = item.OrderID } , new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+
+    </table>
 }
 
-</table>
+

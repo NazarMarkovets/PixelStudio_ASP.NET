@@ -13,35 +13,91 @@ namespace PixelStudio.Controllers
 {
     public class AdministrationController : Controller
     {
-        
+
         string mainconn = ConfigurationManager.ConnectionStrings["StudioConnection"].ConnectionString;
-        
+
         Order orders = new Order();
         List<Order> ordersList = new List<Order>();
 
         PhotoService photoService = new PhotoService();
         List<PhotoService> serviceList = new List<PhotoService>();
 
+        /*-----------------------------------------ORDER MANAGEMENT-------------------------------------*/
 
         public ActionResult All_Orders()
         {
             ordersList = GetOrders();
             return View(ordersList);
-        }
+        } //DONE
 
 
-        public ActionResult Order_Details(int orderId)
+        
+        public ActionResult Order_Details(int? Id)
         {
-            return View();
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            orders = GetOrderInfoById(Id);
+            if (orders == null)
+            {
+                return HttpNotFound();
+            }
+            return View(orders);
         }
 
+        public Order GetOrderInfoById(int? Id)
+        {
+            string sqlExpression = "findUserData";
+            Order getOrder = new Order();
+            using (var connection = new SqlConnection(mainconn))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlExpression, connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                SqlParameter idParam = new SqlParameter
+                {
+                    ParameterName = "@OrderId",
+                    Value = Id
+                };
+                command.Parameters.Add(idParam);
+                var result = command.ExecuteScalar();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            getOrder.OrderID = Convert.ToInt32(reader["OrderId"]);
+                            getOrder.UserInfo = reader["UserData"].ToString();
+                            getOrder.ServiceDesc = reader["ServiceName"].ToString();
+                            getOrder.StatusDesc = reader["CurrentStatus"].ToString();
+                            getOrder.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
+                            getOrder.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
+                            getOrder.Image = reader["Image"].ToString();
+                            ordersList.Add(getOrder);
+                        }
+                        connection.Close();
+                    }
+                    reader.Close();
+                    
+                }
+
+
+                return getOrder;
+            }
+        }
+
+       
         public List<Order> GetOrders()
         {
             ordersList = new List<Order>();
             using (var connection = new SqlConnection(mainconn))
             {
                 connection.Open();
-                string sql = "SELECT OrderId, UserId, NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice, Image FROM [dbo].[Orders]";
+                string sql = "SELECT OrderId,(SELECT Name FROM Statuses WHERE Orders.StatusId = Id)as CurrentStatus," +
+                             " UserId, NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName," +
+                             "TotalPrice, Image FROM [dbo].[Orders]";
                 
                 using (var commant = new SqlCommand(sql, connection))
                 {
@@ -58,6 +114,7 @@ namespace PixelStudio.Controllers
                             //selectedOrder.StatusID = Convert.ToInt32(reader["StatusId"]);
                             selectedOrder.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
                             selectedOrder.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
+                            selectedOrder.ServiceDesc = reader["CurrentStatus"].ToString();
                             selectedOrder.Image = reader["Image"].ToString();
                             ordersList.Add(selectedOrder);
 
@@ -68,6 +125,7 @@ namespace PixelStudio.Controllers
             }
             return ordersList;
         }
+        
 
         /*-----------------------------------------SERVICE MANAGEMENT-------------------------------------*/
 
@@ -226,6 +284,7 @@ namespace PixelStudio.Controllers
                         Service.Description = reader["Description"].ToString();
                         Service.ColorType = reader["ColorType"].ToString();
                         Service.Price = Convert.ToDecimal(reader["Price"]);
+                        Service.Image = reader["Image"].ToString();
                         serviceList.Add(Service);
                     }
                     connection.Close();

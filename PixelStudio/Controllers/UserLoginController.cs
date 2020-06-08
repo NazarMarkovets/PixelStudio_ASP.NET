@@ -25,7 +25,7 @@ namespace PixelStudio.Controllers
             ViewBag.Name = message;
             string mainconn = ConfigurationManager.ConnectionStrings["StudioConnection"].ConnectionString;
             SqlConnection connection = new SqlConnection(mainconn);
-            string sqlquery = "SELECT UserId, Email, UserName, Role, Password from [dbo].[Users] where Email = @Email and Password = @Password";
+            string sqlquery = "SELECT UserId, Email, UserName, RoleID, Password from [dbo].[Users] where Email = @Email and Password = @Password";
             connection.Open();
             SqlCommand sqlCommand = new SqlCommand(sqlquery, connection);
 
@@ -37,19 +37,19 @@ namespace PixelStudio.Controllers
             if (sqlDataReader.HasRows)
             {
                 
-                Session["name"] = login.Email.ToString();
+                Session["email"] = login.Email.ToString();
                 while (sqlDataReader.Read()) // построчно считываем данные
                 {
                     login.Id = Convert.ToInt32(sqlDataReader["UserId"]);
                     string email = sqlDataReader.GetString(1);
                     string name = sqlDataReader.GetString(2);
-                    string role = sqlDataReader.GetString(3);
+                    object role = sqlDataReader.GetValue(3);
                     
                     Session["name"] = name;
                     Session["id"] = login.Id;
                     Session["email"] = email;
 
-                    if (email == "pixelstudio.admin@gmail.com" || role == "admin" && role == "manager")
+                    if (email == "pixelstudio.admin@gmail.com" || (int)role == 1 && (int)role == 3)
                         return Redirect("/Administration/All_Services");
                     break;
                 }
