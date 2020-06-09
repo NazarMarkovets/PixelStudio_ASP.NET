@@ -56,7 +56,7 @@ namespace PixelStudio.Controllers
             //SELECT NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName,TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId= Id)as CurrentStatus FROM [dbo].[Orders] WHERE UserId = 6014;
 
             ordersList = new List<Order>();
-            
+            decimal allPrice = 0;
             using (var connection = new SqlConnection(mainconn))
             {
                 connection.Open();
@@ -73,6 +73,7 @@ namespace PixelStudio.Controllers
                     commant.Parameters.Add(idParam);
                     using (var reader = commant.ExecuteReader())
                     {
+                        
                         while (reader.Read())
                         {
                             Order order = new Order();
@@ -83,7 +84,9 @@ namespace PixelStudio.Controllers
                             order.ServiceDesc = reader["SName"].ToString();
                             order.TotalPrice = Convert.ToInt32(reader["Price"]);
                             order.StatusDesc = reader["Status"].ToString();
-                            order.allPrice += order.TotalPrice;
+                            allPrice += order.TotalPrice;
+                            
+                            
                             ordersList.Add(order);
 
                         }
@@ -91,6 +94,7 @@ namespace PixelStudio.Controllers
                     connection.Close();
                 }
             }
+            ViewBag.AllPrice = allPrice.ToString();
             return ordersList;
         }
 
