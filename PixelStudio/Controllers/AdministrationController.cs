@@ -29,9 +29,6 @@ namespace PixelStudio.Controllers
             ordersList = GetOrders();
             return View(ordersList);
         } //DONE
-
-
-        
         public ActionResult Order_Details(int? Id)
         {
             if (Id == null)
@@ -68,13 +65,15 @@ namespace PixelStudio.Controllers
                     {
                         while (reader.Read())
                         {
+                            
                             getOrder.OrderID = Convert.ToInt32(reader["OrderId"]);
+                            getOrder.StatusID = Convert.ToInt32(reader["Id"]);
                             getOrder.UserInfo = reader["UserData"].ToString();
-                            getOrder.ServiceDesc = reader["ServiceName"].ToString();
-                            getOrder.StatusDesc = reader["CurrentStatus"].ToString();
-                            getOrder.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
+                            getOrder.ServiceDesc = reader["SName"].ToString();
+                            getOrder.StatusDesc = reader["Status"].ToString();
+                            getOrder.TotalPrice = Convert.ToInt32(reader["Price"]);
                             getOrder.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
-                            getOrder.Image = reader["Image"].ToString();
+                            getOrder.Image = reader["Photo"].ToString();
                             ordersList.Add(getOrder);
                         }
                         connection.Close();
@@ -87,18 +86,22 @@ namespace PixelStudio.Controllers
                 return getOrder;
             }
         }
-
-       
         public List<Order> GetOrders()
         {
             ordersList = new List<Order>();
             using (var connection = new SqlConnection(mainconn))
             {
                 connection.Open();
-                string sql = "SELECT OrderId,(SELECT Name FROM Statuses WHERE Orders.StatusId = Id)as CurrentStatus," +
-                             " UserId, NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName," +
-                             "TotalPrice, Image FROM [dbo].[Orders]";
-                
+                string sql = "SELECT Orders.OrderId," +
+                             "(SELECT CONCAT(Users.UserName, ' ', Users.UserSurname) FROM Users WHERE UserId = Orders.UserId) as UserData, Photo," +
+                             "NumbCopies, Seveces.SName,(SELECT Price FROM Seveces WHERE Seveces.serviceId = Order_Services.serviceID)*NumbCopies as Price, Statuses.Name as Status FROM Orders " +
+                             "INNER JOIN Order_Services ON Order_Services.orderID = Orders.OrderId " +
+                             "INNER JOIN Statuses ON Statuses.Id = Orders.StatusId " +
+                             "INNER JOIN Seveces ON Seveces.serviceId = Order_Services.serviceID; ";
+
+
+                //"SELECT Order_Services.Photo as User_Photo, Order_Services.NumbCopies as User_Copies FROM Orders INNER JOIN Order_Services ON Order_Services.orderID = Orders.OrderId; "
+
                 using (var commant = new SqlCommand(sql, connection))
                 {
                     using (var reader = commant.ExecuteReader())
@@ -109,13 +112,13 @@ namespace PixelStudio.Controllers
 
                             
                             selectedOrder.OrderID = Convert.ToInt32(reader["OrderId"]);
-                            selectedOrder.UserID = Convert.ToInt32(reader["UserId"]);
-                            selectedOrder.ServiceDesc = reader["ServiceName"].ToString();
-                            //selectedOrder.StatusID = Convert.ToInt32(reader["StatusId"]);
+                            //selectedOrder.UserInfo = reader["UserData"].ToString();
+                            //selectedOrder.Image = reader["Photo"].ToString();
                             selectedOrder.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
-                            selectedOrder.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
-                            selectedOrder.ServiceDesc = reader["CurrentStatus"].ToString();
-                            selectedOrder.Image = reader["Image"].ToString();
+                            selectedOrder.ServiceDesc = reader["SName"].ToString();
+                            selectedOrder.TotalPrice = Convert.ToInt32(reader["Price"]);
+                            selectedOrder.StatusDesc = reader["Status"].ToString();
+                            
                             ordersList.Add(selectedOrder);
 
                         }
@@ -126,15 +129,99 @@ namespace PixelStudio.Controllers
             return ordersList;
         }
 
+        public ActionResult Edit_Order(int? Id)
+        {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (orders == null)
+            {
+                return HttpNotFound();
+            }
+            orders = GetOrderInfoById(Id);
+            return View(orders);
+        }
+        [HttpPost]
+        public ActionResult Edit_Order(int? Id, Order order)
+        {
+
+            try
+            {
+                Update_Order(Id, order);
+                return RedirectToAction("All_Orders");
+            }
+            catch
+            {
+                return View();
+
+            }
+
+        }
+
+        public Order Update_Order(int? id, Order order)
+        {
+
+            using (SqlConnection sqlConnection = new SqlConnection(mainconn))
+            {
+                sqlConnection.Open();
+                string command = "UPDATE [dbo].[Orders] SET StatusId = @status WHERE OrderId = @Id";
+                SqlCommand sqlCommand = new SqlCommand(command, sqlConnection);
+
+                sqlCommand.Parameters.AddWithValue("@Id", id);
+                sqlCommand.Parameters.AddWithValue("@status", order.StatusID);
+     
+                sqlCommand.ExecuteNonQuery();
+
+                sqlConnection.Close();
+
+            }
+            return orders;
+        }
+
 
         /*-----------------------------------------USER MANAGEMENT-------------------------------------*/
         Users users = new Users();
         List<Users> usersList = new List<Users>();
         public ActionResult All_Users()
         {
-            ordersList = GetOrders();
-            return View(ordersList);
+            usersList = GetUsers();
+            return View(usersList);
         } //DONE
+
+        public List<Users> GetUsers()
+        {
+            usersList = new List<Users>();
+            using (var connection = new SqlConnection(mainconn))
+            {
+                connection.Open();
+                string sql = "SELECT UserId, UserName, UserSurname, (SELECT RoleName FROM [dbo].[Role] WHERE RoleId = Users.RoleID)as Roles, Phone, Email FROM Users;";
+
+                using (var commant = new SqlCommand(sql, connection))
+                {
+                    using (var reader = commant.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var user = new Users();
+
+
+                            user.UserId = Convert.ToInt32(reader["UserId"]);
+                            user.UserName = reader["UserName"].ToString();
+                            user.UserSurname = reader["UserSurname"].ToString();
+                            user.Role = reader["Roles"].ToString();
+                            user.Phone = reader["Phone"].ToString();
+                            user.Email = reader["Email"].ToString();
+                            usersList.Add(user);
+
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            return usersList;
+        }
 
         /*-----------------------------------------SERVICE MANAGEMENT-------------------------------------*/
 

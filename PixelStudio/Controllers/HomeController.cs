@@ -61,22 +61,29 @@ namespace PixelStudio.Controllers
             {
                 connection.Open();
                 string tmp = Convert.ToString(Session["Id"]);
-                string sql = "SELECT OrderId, NumbCopies, (SELECT SName FROM Seveces WHERE Orders.ServiceId = serviceId)as ServiceName," +
-                             "TotalPrice, Image, (SELECT Name FROM Statuses WHERE Orders.StatusId = Id)as CurrentStatus " +
-                             "FROM [dbo].[Orders] WHERE UserId =" + tmp;
-                using (var commant = new SqlCommand(sql, connection))
+                string sqlExpression = "shopCart";
+                using (var commant = new SqlCommand(sqlExpression, connection))
                 {
+                    commant.CommandType = System.Data.CommandType.StoredProcedure;
+                    SqlParameter idParam = new SqlParameter
+                    {
+                        ParameterName = "@UserId",
+                        Value = tmp
+                    };
+                    commant.Parameters.Add(idParam);
                     using (var reader = commant.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             Order order = new Order();
                             order.OrderID = Convert.ToInt32(reader["OrderId"]);
+                            order.ServiceID = Convert.ToInt32(reader["serviceId"]);
+                            order.Image = reader["Photo"].ToString();
                             order.NumbCopies = Convert.ToInt32(reader["NumbCopies"]);
-                            order.ServiceDesc = reader["ServiceName"].ToString();
-                            order.TotalPrice = Convert.ToInt32(reader["TotalPrice"]);
-                            order.StatusDesc = reader["CurrentStatus"].ToString();
-                            order.Image = reader["Image"].ToString();
+                            order.ServiceDesc = reader["SName"].ToString();
+                            order.TotalPrice = Convert.ToInt32(reader["Price"]);
+                            order.StatusDesc = reader["Status"].ToString();
+                            order.allPrice += order.TotalPrice;
                             ordersList.Add(order);
 
                         }
@@ -296,6 +303,46 @@ namespace PixelStudio.Controllers
             }
 
         }
+
+        public ActionResult DeleteOrder()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int? Id, int? sID)
+        {
+            try
+            {
+                DeleteOrd(Id, sID);
+                return RedirectToAction("All_Services");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        public Order DeleteOrd(int? Id, int?sid)
+        {
+            orders = new Order();
+
+            using (var connection = new SqlConnection(mainconn))
+            {
+                connection.Open();
+                string sql = "DELETE [dbo].[Order_Services] WHERE orderID = @Id and serviceID = @sid";
+                SqlCommand command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@Id", Id);
+                command.Parameters.AddWithValue("@sid", sid);
+                command.ExecuteNonQuery();
+
+                connection.Close();
+
+            }
+            return orders;
+        }
+
         [HttpPost]
         public ActionResult MakeOrderForEnteredUser(int? Id, HomeSet homeSet, HttpPostedFileBase file)
         {
@@ -318,6 +365,7 @@ namespace PixelStudio.Controllers
             
         }
 
+        
         public HomeSet CreateProcedure(int? id, HomeSet homeSet, HttpPostedFileBase file)
         {
             Random random = new Random();
@@ -325,7 +373,7 @@ namespace PixelStudio.Controllers
             var Enctipt = FormsAuthentication.HashPasswordForStoringInConfigFile(encriptValue, "SHA1");
             Enctipt = Enctipt.Substring(0, 12);
             homeSet.register.Password = Enctipt;
-            int ClientID;
+            //int ClientID;
             using (SqlConnection sqlConnection = new SqlConnection(mainconn))
             {
                 

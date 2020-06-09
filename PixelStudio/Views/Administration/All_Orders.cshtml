@@ -4,63 +4,81 @@
     ViewBag.Title = "All Orders";
 }
 
+<style>
+    td{
+        border:dashed;
+    }
+</style>
+
 @if (Session["email"] != null)
 {
     <h4>Welcome @Session["email"].ToString()</h4>
     <h2>All Orders</h2>
 
-    <table class="table">
-        <tr>
+    <table class="container" style="text-align:center;">
+        <tr style="background-color:rgba(111, 104, 104, 0.63);width:100%; height:40px; border:dashed">
             <th>
                  Номер заказа:
             </th>
             <th>
-                Номер пользователя:
+                Статус:
             </th>
-            
             <th>
                 Количество копий:
             </th>
             <th>
                 Сумарная цена:
             </th>
-            <th>
-                Статус заказа:
+            <th style="text-align:center;">
+                Услуга:
             </th>
-            <th>Фото пользователя:</th>
+            <th></th>
+            @*<th>Фото пользователя:</th>*@
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserID)
-                </td>
-                
-                <td>
-                    @Html.DisplayFor(modelItem => item.NumbCopies)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TotalPrice)
-                </td>
-                
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServiceDesc)
-                </td>
-                <td>
-                    <img src="@Url.Content(item.Image)" width="200" height="200" />
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }, new { @class = "btn btn-warning" })
-                    @Html.ActionLink("Details", "Order_Details", new { id = item.OrderID }, new { @class = "btn btn-info" }) 
-                    @Html.ActionLink("Delete", "Delete", new { id = item.OrderID } , new { @class = "btn btn-danger" })
-                </td>
-            </tr>
-        }
+        <tr style="border:dashed">
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderID)
+            </td>
 
+            @if (item.StatusDesc == "New")
+            {
+                <td class="btn btn-success" width="100%">
+                    @Html.DisplayFor(modelItem => item.StatusDesc)
+                </td>
+            }
+            @if (item.StatusDesc != "New")
+            {
+                <td class="">
+                    @Html.DisplayFor(modelItem => item.StatusDesc)
+                </td>
+            }
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.NumbCopies)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceDesc)
+            </td>
+            
+            @*<td>
+            <img src="@Url.Content(item.Image)" width="200" height="200" />
+        </td>*@
+            <td style="border:none;     display: inline-flex;">
+                @Html.ActionLink("Изменить", "Edit_Order", new { id = item.OrderID }, new { @class = "btn btn-warning" })
+                @Html.ActionLink("Детали", "Order_Details", new { id = item.OrderID }, new { @class = "btn btn-info" })
+                @*@Html.ActionLink("Отменить", "Delete", new { id = item.OrderID }, new { @class = "btn btn-danger" })*@
+            </td>
+        </tr>
+        }
+        
     </table>
 }
 

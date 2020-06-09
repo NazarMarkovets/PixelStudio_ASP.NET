@@ -25,12 +25,16 @@
             Количество копий
         </th>
         <th>
-            Сумарная цена
+            Цена по услуге
         </th>
-        
         <th>
             Ваша фотография
         </th>
+        @foreach (var item in Model)
+        {
+            <th>Суммарная цена: @Html.DisplayFor(modelItem => item.allPrice)</th>
+        }
+        
         <th></th>
     </tr>
 
@@ -41,6 +45,7 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.StatusDesc)
+            @Html.HiddenFor(modelItem => item.ServiceID)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ServiceDesc)
@@ -54,12 +59,14 @@
         <td>
             <img src="@Url.Content(item.Image)" width="200" height="200" />
         </td>
-        
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.OrderID }) |
+
+        @*<td>
+
             @Html.ActionLink("Details", "Details", new { id = item.OrderID }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.OrderID })
-        </td>
+            @Html.ActionLink("Delete order", "DeleteOrder", new { id = item.OrderID, sid = item.ServiceID })
+        </td>*@
+
+        
     </tr>
 }
 

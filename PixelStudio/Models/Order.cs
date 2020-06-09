@@ -23,6 +23,7 @@ namespace PixelStudio.Models
         public string ServiceDesc { get; set; }
         public int NumbCopies { get; set; }
         public int TotalPrice { get; set; }
+        public int allPrice { get; set; }
         public int StatusID { get; set; }
         public string StatusDesc { get; set; }
         public string UserInfo { get; set; }

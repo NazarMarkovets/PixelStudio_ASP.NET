@@ -199,6 +199,9 @@
     <Content Include="Views\Home\MakeOrderForEnteredUser.cshtml" />
     <Content Include="Views\Home\ShopCard.cshtml" />
     <Content Include="Views\Administration\Order_Details.cshtml" />
+    <Content Include="Views\Administration\All_Users.cshtml" />
+    <Content Include="Views\Home\DeleteOrder.cshtml" />
+    <Content Include="Views\Administration\Edit_Order.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

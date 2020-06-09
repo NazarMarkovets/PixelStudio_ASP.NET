@@ -14,13 +14,13 @@
 
 @if (Session["name"] != null || Session["email"] != null)
 {
-    <div class="alert-success" style="display:flex">
+    <div style="display:flex">
 
-        <h4>Welcome @Session["email"].ToString()</h4>
+        <h4 class="text-success">Welcome @Session["email"].ToString()</h4>
         <div class="btn-group" role="group" style="padding-left:20px;">
-            <button type="button" class="btn btn-secondary">@Html.ActionLink("Add new ", "Create_new_Service")</button>
+            <button type="button" class="btn btn-secondary">@Html.ActionLink("Add new service", "Create_new_Service")</button>
             <button type="button" class="btn btn-secondary">@Html.ActionLink("Get orders ", "All_Orders")</button>
-            <button type="button" class="btn btn-secondary">Clients</button>
+            <button type="button" class="btn btn-secondary">@Html.ActionLink("User controll ", "All_Users")</button>
         </div>
 
 
@@ -29,34 +29,35 @@
     <h2 class="text-center">All Services</h2>
 
 
-    <table class="table" style="display:flex">
-        <tr>
+    <table class="container" style="text-align:center;" >
+        <tr style="background-color:rgba(111, 104, 104, 0.63);width:100%; border:dashed;">
             <th>
-                @Html.DisplayNameFor(model => model.ServiceId)
+                Код услуги:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Название услуги:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PhotoFormat)
+                Формат фото
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Описание услуги:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ColorType)
+                Подходящая цветовая схема:
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Цена за 1 шт.
             </th>
             <th>
-
+                Изображение
             </th>
+            <th></th>
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
+            <tr style="border:dashed">
                 <td>
                     @Html.DisplayFor(modelItem => item.ServiceId)
                 </td>
@@ -75,7 +76,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
-                <td>
+                <td style="padding: 10px;">
                     <img src="@Url.Content(item.Image)" width="200" height="200" />
                 </td>
                 <td style="display:inline-flex;">
