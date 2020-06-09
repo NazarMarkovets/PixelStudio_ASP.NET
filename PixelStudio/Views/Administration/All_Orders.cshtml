@@ -45,13 +45,32 @@
 
             @if (item.StatusDesc == "New")
             {
-                <td class="btn btn-success" width="100%">
+                <td class="btn btn-danger" width="100%">
                     @Html.DisplayFor(modelItem => item.StatusDesc)
                 </td>
             }
-            @if (item.StatusDesc != "New")
+            
+            @if (item.StatusDesc == "Processing")
             {
-                <td class="">
+                <td class="btn btn-info">
+                    @Html.DisplayFor(modelItem => item.StatusDesc)
+                </td>
+            }
+            @if (item.StatusDesc == "Wait for user")
+            {
+                <td class="btn btn-warning">
+                    @Html.DisplayFor(modelItem => item.StatusDesc)
+                </td>
+            }
+            @if (item.StatusDesc == "Discarded")
+            {
+                <td class="btn btn-secondary">
+                    @Html.DisplayFor(modelItem => item.StatusDesc)
+                </td>
+            }
+            @if (item.StatusDesc == "Finished")
+            {
+                <td class="btn btn-success">
                     @Html.DisplayFor(modelItem => item.StatusDesc)
                 </td>
             }
@@ -67,7 +86,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ServiceDesc)
             </td>
-            
+
             @*<td>
             <img src="@Url.Content(item.Image)" width="200" height="200" />
         </td>*@
