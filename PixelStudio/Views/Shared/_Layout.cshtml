@@ -44,12 +44,17 @@
                     @if (Session["name"] != null && Session["email"] != null)
                     {
 
-                        <li  style="background-color:#5bc0de00">
+
+                        <li style="background-color:#5bc0de00">
                             <a href="#" class="Role">@Session["name"].ToString()   <b>Session ID : @Session["id"].ToString()</b></a>
                         </li>
 
                         <li>@Html.ActionLink("Sign Out", "SignOut", "UserLogin")</li>
 
+                    }
+                    @if (Convert.ToInt32(Session["id"]) == 1)
+                    {
+                        <li>@Html.ActionLink("All services", "All_Services", "Administration")</li>
                     }
 
                 </ul>

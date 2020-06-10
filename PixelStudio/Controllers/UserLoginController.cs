@@ -48,7 +48,7 @@ namespace PixelStudio.Controllers
                     Session["name"] = name;
                     Session["id"] = login.Id;
                     Session["email"] = email;
-
+                    ViewData["Message"] = Convert.ToInt32(Session["id"]);
                     if (email == "pixelstudio.admin@gmail.com" || (int)role == 1 && (int)role == 3)
                         return Redirect("/Administration/All_Services");
                     break;
