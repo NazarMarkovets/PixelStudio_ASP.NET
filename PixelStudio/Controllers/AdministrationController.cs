@@ -42,6 +42,46 @@ namespace PixelStudio.Controllers
             }
             return View(orders);
         }
+//---------------------------TASK ---------------------------------------
+        public ActionResult All_UnpopularServeces()
+        {
+            serviceList = GetUnpopular();
+            return View(serviceList);
+        }
+
+        public List<PhotoService> GetUnpopular()
+        {
+            serviceList = new List<PhotoService>();
+            using (var connection = new SqlConnection(mainconn))
+            {
+                connection.Open();
+                string sql = "SELECT" +
+                                " Seveces.SName," +
+                                " SUM((Seveces.Price * Order_Services.NumbCopies)) as price" +
+                                " FROM Order_Services INNER JOIN Orders on Order_Services.orderID = Orders.OrderId" +
+                                " INNER JOIN Seveces on Seveces.serviceId = Order_Services.serviceID" +
+                                " GROUP BY Seveces.SName order by price; ";
+
+                using (var commant = new SqlCommand(sql, connection))
+                {
+                    using (var reader = commant.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var serv = new PhotoService();
+                            serv.Name = reader["SName"].ToString();
+                            serv.Price = Convert.ToDecimal(reader["price"]);
+                            serviceList.Add(serv);
+
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            return serviceList;
+        }
+
+//------------------------------------------------FINISHED------------------------
 
         public Order GetOrderInfoById(int? Id)
         {

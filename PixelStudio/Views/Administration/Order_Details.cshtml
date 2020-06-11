@@ -1,10 +1,10 @@
 ﻿@model PixelStudio.Models.Order
 
 @{
-    ViewBag.Title = "Order_Details";
+    ViewBag.Title = "Order Details";
 }
 
-<h2>Order_Details</h2>
+<h2>Order Details</h2>
 
 <div>
     <h4>Order</h4>
@@ -85,6 +85,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редактировать", "Edit_Order", new { id = Model.OrderID }) |
+    @Html.ActionLink("Назад", "All_Orders")
 </p>

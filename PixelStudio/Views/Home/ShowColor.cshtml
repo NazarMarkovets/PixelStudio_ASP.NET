@@ -59,8 +59,8 @@
             <img src="@Url.Content(item.Image)" width="200" height="200" />
         </td>
         <td>
-            @Html.ActionLink("Buy", "MakeOrder", new { id = item.ServiceId })
-            @Html.ActionLink("Details", "Service_Details", new { id = item.ServiceId })
+            @Html.ActionLink("Купить", "MakeOrder", new { id = item.ServiceId }, new { @class = "btn btn-success" })
+            @Html.ActionLink("Подробнее", "Service_Details", new { id = item.ServiceId }, new { @class = "btn btn-info" })
         </td>
     </tr>
 }

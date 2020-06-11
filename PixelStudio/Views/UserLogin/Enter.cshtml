@@ -4,7 +4,7 @@
     ViewBag.Title = "Enter";
 }
 
-<h2>Enter</h2>
+<h2>Вход в учётную запись</h2>
 
 
 @using (Html.BeginForm()) 
@@ -12,7 +12,7 @@
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    <h4>LoginSystem</h4>
+    <h4>Система входа</h4>
     <h3 color="green">@ViewBag.Name</h3>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -58,7 +58,7 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Login" class="btn btn-default" />
+            <input type="submit" value="Вход" class="btn btn-success" />
         </div>
     </div>
 
@@ -72,8 +72,8 @@
 </div>
 }
 
-    <div class="btn btn-default">
-        @Html.ActionLink("Go Home", "Home", "Home")
+    <div>
+        @Html.ActionLink("Go Home", "Home", "Home", new { @class = "btn btn-default" })
     </div>
 
 @section Scripts {

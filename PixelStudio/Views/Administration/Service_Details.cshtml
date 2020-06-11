@@ -4,7 +4,7 @@
     ViewBag.Title = "Service Details";
 }
 
-<h2>Service Details</h2>
+<h2>Детали услуги:</h2>
 
 <div>
     <h4>PhotoService</h4>
@@ -67,6 +67,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit_Service", new {  id = Model.ServiceId  }) |
-    @Html.ActionLink("Back to List", "All_Services")
+    @Html.ActionLink("Редактировать", "Edit_Service", new {  id = Model.ServiceId  }, new { @class = "btn btn-warning" }) 
+    @Html.ActionLink("Назад", "All_Services", null, new { @class = "btn btn-default" })
 </p>

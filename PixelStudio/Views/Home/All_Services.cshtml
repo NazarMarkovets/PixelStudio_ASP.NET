@@ -4,13 +4,13 @@
     ViewBag.Title = "All Services";
 }
 
-<h2>All Services</h2>
+<h2>Все услуги</h2>
 
 @*<p>
     @Html.ActionLink("Create New", "Create")
 </p>*@
-<table class="table">
-    <tr>
+<table class="table" style="border:dashed">
+    <tr style="border:dashed">
         @*<th>
             @Html.DisplayNameFor(model => model.ServiceId)
         </th>*@
@@ -32,7 +32,8 @@
         @*<th>
             @Html.DisplayNameFor(model => model.Image)
         </th>*@
-        <th></th>
+        <th> </th>
+        <th ></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -59,8 +60,8 @@
             <img src="@Url.Content(item.Image)" width="200" height="200" />
         </td>
         <td>
-            @Html.ActionLink("Buy", "MakeOrder", new { id=item.ServiceId}) 
-            @Html.ActionLink("Details", "Service_Details", new { id=item.ServiceId }) 
+            @Html.ActionLink("Купить", "MakeOrder", new { id=item.ServiceId}, new { @class = "btn btn-success" }) 
+            @Html.ActionLink("Подробнее", "Service_Details", new { id=item.ServiceId }, new { @class = "btn btn-info" }) 
         </td>
     </tr>
 }
@@ -68,5 +69,5 @@
 </table>
 
 <div>
-    @Html.ActionLink("Back to List", "Home", "Home")
+    @Html.ActionLink("На главную", "Home", "Home", null, new { @class = "btn btn-default" })
 </div>

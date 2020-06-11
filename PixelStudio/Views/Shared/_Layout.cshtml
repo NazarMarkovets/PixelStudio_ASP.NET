@@ -55,6 +55,7 @@
                     @if (Convert.ToInt32(Session["id"]) == 1)
                     {
                         <li>@Html.ActionLink("All services", "All_Services", "Administration")</li>
+                        <li>@Html.ActionLink("All unpopular services", "All_UnpopularServeces", "Administration")</li>
                     }
 
                 </ul>

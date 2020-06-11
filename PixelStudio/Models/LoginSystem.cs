@@ -16,6 +16,7 @@ namespace PixelStudio.Models
         [Required(ErrorMessage = "Please enter your Password")]
         [Display(Name = "Enter Password :")]
         [DataType(DataType.Password)]
+        
         public string Password { get; set; }
         public Users users { get; set; }
     }
